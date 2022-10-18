@@ -8,7 +8,7 @@ CLASSESO=Classes/Option/
 OBJSM=Classes/Modele/Modele.o
 OBJSV=Classes/Voiture/Voiture.o
 OBJSO=Classes/Option/Option.o
-CO=g++ -D DEBUG -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO)    #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
+CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO)    #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
 all:	Test2a Test2b Test2c

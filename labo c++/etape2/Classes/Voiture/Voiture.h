@@ -23,9 +23,9 @@ public:
 	void AjouteOption(const Option &);
 	void RetireOption(string code);
 
-	const string getNom()const;
+	string getNom()const;
 
-	const Modele getModele()const;
+	Modele getModele()const;
 	float getPrix();
 
 

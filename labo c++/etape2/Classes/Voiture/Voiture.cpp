@@ -35,10 +35,7 @@ Voiture::Voiture(const string & nomV,const Modele & modele)
 	setNom(nomV);
 	setModele(modele); 
 
-	for(unsigned long i = 0;i<(sizeof(options)/sizeof(options[0]));i++)
-		if(options[i]!=NULL)
-			options[i] = new Option(*options[i]);
-
+	
 }
 
 
@@ -57,6 +54,10 @@ Voiture::Voiture (const Voiture &source)
 		if(source.options[i]!=NULL)
 		{
 			options[i]= new Option(*source.options[i]);
+		}
+		else
+		{
+			options[i] = NULL;
 		}
 	}
 
@@ -91,14 +92,14 @@ Voiture::~Voiture()
 
 /********GETTERS*****************************/
 
-const string Voiture::getNom()const
+string Voiture::getNom()const
 {
 
 	return nomVoiture;
 
 }
 
-const Modele Voiture::getModele()const
+Modele Voiture::getModele()const
 {
 
 	return modele;

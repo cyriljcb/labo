@@ -12,14 +12,14 @@ int main()
     option.Affiche();
   }
 
-  /*cout << endl << "(2) **** Test des setters/getters ************************************************" << endl;
+  cout << endl << "(2) **** Test des setters/getters ************************************************" << endl;
   {
     Option option;
     option.setCode("0MM0");
     option.setIntitule("Peinture metallisee");
     option.setPrix(450.0f);
     option.Affiche();
-  }*/
+  }
 
   cout << endl << "(3) ***** Test du constructeur d'initialisation de Option ************************" << endl;
   {
