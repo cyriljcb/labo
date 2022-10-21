@@ -28,7 +28,7 @@ public:
 
 	const string getNom()const;
 
-	const Modele getModele()const;
+	Modele getModele()const;
 	float getPrix();
 
 
@@ -38,7 +38,7 @@ public:
 	/******surchage des opérateurs*******/
 
 	Voiture& operator=(const Voiture&);
-	Voiture& operator+(const Option&);
+	Voiture operator+(const Option&)const;
 
 
 

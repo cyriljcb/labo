@@ -8,15 +8,13 @@ CLASSESO=Classes/Option/
 OBJSM=Classes/Modele/Modele.o
 OBJSV=Classes/Voiture/Voiture.o
 OBJSO=Classes/Option/Option.o
-CO=g++ -D DEBUG -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO)    #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
+CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO)    #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
 Test3:		Test3.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o
 	# g++ Test1.cpp $(CLASSE)Modele.o -I Classes/ -o Test1
 	echo "Creation de Test2c"
 	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) Test3.cpp -o Test3
-
-
 	
 
 $(CLASSESM)Modele.o:	$(CLASSESM)Modele.cpp

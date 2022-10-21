@@ -35,10 +35,7 @@ Voiture::Voiture(const string & nomV,const Modele & modele)
 	setNom(nomV);
 	setModele(modele); 
 
-	for(unsigned long i = 0;i<(sizeof(options)/sizeof(options[0]));i++)
-		if(options[i]!=NULL)
-			options[i] = new Option(*options[i]);
-
+	
 }
 
 
@@ -54,9 +51,17 @@ Voiture::Voiture (const Voiture &source)
 	setModele(source.getModele());
 	for(int i=0;i<5;i++)
 	{
-		if(options[i]!=NULL)
+		if(source.options[i]!=NULL)
 		{
+			
 			options[i]= new Option(*source.options[i]);
+		}
+		else
+
+
+		{
+			
+			options[i] = NULL;
 		}
 	}
 
@@ -98,7 +103,7 @@ const string Voiture::getNom()const
 
 }
 
-const Modele Voiture::getModele()const
+Modele Voiture::getModele()const
 {
 
 	return modele;
@@ -154,12 +159,20 @@ void Voiture::AjouteOption(const Option & opt)
 {
 	
 	unsigned long i=0;
-	while(i<(sizeof(options)/sizeof(options[0]))&&options[i]!=NULL)
+	/*while(i<(sizeof(options)/sizeof(options[0]))&&options[i]!=NULL)
 		i++;
 
 
 	if(i<(sizeof(options)/sizeof(options[0])))
-		options[i]=new Option (opt);
+		options[i]=new Option (opt);*/
+	for(i=0;i<5;i++)
+	{
+		if(options[i]==NULL)
+		{
+			options[i]=new Option (opt);
+			i=5;
+		}
+	}
 	
 	
 }
@@ -202,29 +215,36 @@ float Voiture::getPrix()
 
 Voiture& Voiture::operator=(const Voiture& v1)
 {
+	int i,a;
 	
 	setNom(v1.getNom());
 	setModele(v1.getModele());
-	for(int i=0;i<5;i++)
+	for(i = 0;i<5;i++)
 	{
 		if(v1.options[i]!=NULL)
 		{
-			options[i]= new Option(*v1.options[i]);
+			options[i]= new Option(*v1.options[i]);	
+		}
+		else
+		{
+			options[i] = NULL;
 		}
 	}
 
 	return (*this);
 }
 
-Voiture& Voiture::operator+(const Option& o1)
+Voiture Voiture::operator+(const Option& o1)const
 {
+	
 	Voiture v(*this);
+	
 	v.AjouteOption(o1);	
 	return v;
 }
 
 
-Voiture& operator+(const Option& o1,const Voiture& v1)
+Voiture operator+(const Option& o1,const Voiture& v1)
 {
 	return v1 + o1;
 }
