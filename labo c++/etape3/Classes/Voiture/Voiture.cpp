@@ -137,6 +137,7 @@ void Voiture::setModele(const Modele & m)
 void Voiture::Affiche()const
 {
 	int nb_options = 0;
+	Voiture v(*this);
 	cout << "Nom de la voiture:" << nomVoiture<<endl;
 	modele.Affiche(); 
 
@@ -149,8 +150,12 @@ void Voiture::Affiche()const
     cout << "Nombre total d'options : " << nb_options << endl;
 
     for (unsigned long i = 0; i < (sizeof(options) / sizeof(options[0])); i++)
-        if (options[i] != NULL)
-            options[i]->Affiche();
+    { 
+       	if (options[i] != NULL)
+                   options[i]->Affiche();
+    }
+
+    cout << "prix total de la voiture avec les options : "<<v.getPrix()<<"f"<<endl;
 
 }
 
@@ -293,3 +298,9 @@ int Voiture::compV(Voiture& v1)const
 	return 0;
 }
 
+ostream& operator<< (ostream& s, const Voiture& v1)
+{	
+	v1.Affiche();
+
+	return s;
+}

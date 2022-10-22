@@ -30,6 +30,9 @@ public:
 	void setIntitule(const string &);
 	void setPrix(float);
 
+	Option operator--();
+	Option operator--(int);
+
 
 
 

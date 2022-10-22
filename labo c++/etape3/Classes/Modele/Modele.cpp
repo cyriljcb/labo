@@ -1,6 +1,7 @@
 #include "Modele.h"
 #include <iostream>
 #include <string.h>
+#include <string>
 
 //#define DEBUG
 
@@ -159,3 +160,79 @@ void Modele::Affiche()const
 	}
 }
 
+/****************************************************************************/
+/***** surcharges des operateurs*********************************************/
+/****************************************************************************/
+
+ostream& operator<< (ostream& s, const Modele& m)
+{	
+	s << "le nom : "<< m.nom << endl;
+	s << "la puissance : "<<m.puissance<<endl;
+	s << "le prix de base : "<<fixed<<m.prixDeBase<<"f"<<endl;
+	s << "le moteur : ";
+	switch(m.getMoteur()){
+		case Essence : 
+			cout<<"Essence "<<endl;
+		break;
+		case Diesel : 
+			cout<<"Diesel"<<endl;
+		break;
+		case Electrique : 
+			cout<<"Electrique"<<endl;
+		break;
+		case Hybride : 
+			cout<<"Hybride"<<endl;
+		break;
+	cout<<endl;
+	}
+	//m.Affiche();
+	return s;
+}
+
+istream& operator>> (istream& s, Modele& m)
+{
+	string nom;
+	string puis;
+	string pr;
+	string chmoteur;
+	int puissance;
+	float prix =0.0;
+	int choixMoteur;
+
+	cout<<"entrez le nom : ";
+	getline(cin,nom);
+	size_t size = nom.size() + 1;
+	char  n[size];
+	strncpy( n, nom.c_str(), size );
+	m.setNom(n);
+	cout<<"entrez la puissance : ";
+	getline(cin,puis);
+	puissance = stoi(puis);
+
+	m.setPuissance(puissance);
+	cout<<"entrez le prix : ";
+	getline(cin,pr);
+	prix = stof(pr);
+	m.setPrixDeBase(prix);
+	cout << "pour selectionner le moteur, entrez "<<endl;
+	cout << "1 pour essence"<<endl<<"2 pour diesel"<<endl<<"3 pour Electrique"<<endl<<"4 pour hybride"<<endl;
+	cout << "Que choississez-vous : "<<endl;
+	s >> choixMoteur;
+	switch(choixMoteur){
+		case 1 : 
+			m.setMoteur(Essence);
+		break;
+		case 2 : 
+			m.setMoteur(Diesel);
+		break;
+		case 3 : 
+			m.setMoteur(Electrique);
+		break;
+		case 4 : 
+			m.setMoteur(Hybride);
+		break;
+	cout<<endl;
+	}
+
+	return s;
+}

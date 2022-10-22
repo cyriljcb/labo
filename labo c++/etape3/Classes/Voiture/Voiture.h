@@ -10,6 +10,7 @@ class Voiture
 {
 
 friend Voiture operator+ (const Option&,const Voiture&);
+friend ostream& operator<<(ostream&, const Voiture&);
 
 private:
 	int i;

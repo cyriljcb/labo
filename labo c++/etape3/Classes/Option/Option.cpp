@@ -137,14 +137,12 @@ void Option::Affiche()const
 
 
 ostream& operator<< (ostream& s, const Option& o1)
-{	/*int i;
-	for(i=0;i<5;i++)
-	{
-
-	}*/
+{	
 	s << "le code : "<< o1.code << endl;
 	s << "l'intitule : "<<o1.intitule<<endl;
 	s << "le prix des options : "<<fixed<<o1.prix<<"f"<<endl;
+
+	//o1.Affiche();
 	return s;
 }
 
@@ -162,11 +160,33 @@ istream& operator>> (istream& s, Option& o1)
 	getline(cin,pr);
 	prix = stof(pr);
 
-
-
 	o1.setCode(code);
 	o1.setIntitule(intitule);
 	o1.setPrix(prix);
 
 	return s;
+}
+
+Option Option::operator--()
+{
+	/*Option o1(*this);
+	float p;
+	p= o1.getPrix()- 50.0;
+	o1.setPrix(p);
+	return o1;*/
+
+	setPrix(getPrix()- 50);
+	return *this;
+}
+Option Option::operator--(int)
+{
+	/*Option o1(*this);
+	float p;
+	p= o1.getPrix()- 50.0;		//pas bon car modifie o1 et pas ce que pointe *this
+	o1.setPrix(p);
+	return o1;*/
+
+	Option o1(*this);
+	setPrix(getPrix()- 50);
+	return o1;
 }

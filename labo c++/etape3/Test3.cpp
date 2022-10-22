@@ -30,11 +30,11 @@ int main(int argc,char* argv[])
       case 3 : Essai3(); break;
       case 4 : Essai4(); break;
       case 5 : Essai5(); break;
-      /*case 6 : Essai6(); break;
+      case 6 : Essai6(); break;
       case 7 : Essai7(); break;
       case 8 : Essai8(); break;
-      case 9 : Essai9(); break;
-      default : fini = true ; break;*/
+      /*case 9 : Essai9(); break;*/
+      default : fini = true ; break;
     }
   }
 
@@ -189,61 +189,61 @@ void Essai5()
 // /*******************************************************************************************************/
 // ** Test des opérateurs << et >> de la classe Modele *************************************************
 // /*******************************************************************************************************/
-// void Essai6()
-// {
-//   cout << "**********************************************************************" << endl;
-//   cout << "(6) ***** Tests des opérateurs << et >> de Modele ********************" << endl;
-//   cout << "**********************************************************************" << endl;
-//   Modele m;
-//   cout << "Saisissez un nouveau modele :" << endl;
-//   cin >> m;
-//   cout << endl << "Voici le modele que vous avez encode :" << endl;
-//   cout << m << endl << endl;
-// }
+void Essai6()
+{
+  cout << "**********************************************************************" << endl;
+  cout << "(6) ***** Tests des opérateurs << et >> de Modele ********************" << endl;
+  cout << "**********************************************************************" << endl;
+  Modele m;
+  cout << "Saisissez un nouveau modele :" << endl;
+  cin >> m;
+  cout << endl << "Voici le modele que vous avez encode :" << endl;
+  cout << m << endl << endl;
+}
 
 // /*******************************************************************************************************/
 // /*** Test de l'opérateur << de la classe Voiture *******************************************************/
 // /*******************************************************************************************************/
-// void Essai7()
-// {
-//   cout << "**********************************************************************" << endl;
-//   cout << "(7) ***** Tests de l'opérateur << de Voiture *************************" << endl;
-//   cout << "**********************************************************************" << endl;
-//   Voiture v("Projet_208_MrLagalere",Modele("208 Access 1.0",68,Essence,12500.0f));
-//   cout << endl << "Voici le projet de Voiture (sans option) :" << endl;
-//   cout << v << endl;
+void Essai7()
+{
+  cout << "**********************************************************************" << endl;
+  cout << "(7) ***** Tests de l'opérateur << de Voiture *************************" << endl;
+  cout << "**********************************************************************" << endl;
+  Voiture v("Projet_208_MrLagalere",Modele("208 Access 1.0",68,Essence,12500.0f));
+  cout << endl << "Voici le projet de Voiture (sans option) :" << endl;
+  cout << v << endl;
 
-//   v.AjouteOption(Option("0MM0","Peinture metallisee",450.0f));
-//   v.AjouteOption(Option("ZH75","Jante alliage leger 15 pouces",450.0f));
-//   v.AjouteOption(Option("UB01","Detecteur obstacles arriere",250.0f));
+  v.AjouteOption(Option("0MM0","Peinture metallisee",450.0f));
+  v.AjouteOption(Option("ZH75","Jante alliage leger 15 pouces",450.0f));
+  v.AjouteOption(Option("UB01","Detecteur obstacles arriere",250.0f));
 
-//   cout << endl << "Voici le projet de Voiture (avec options) :" << endl;
-//   cout << v << endl;
-// }
+  cout << endl << "Voici le projet de Voiture (avec options) :" << endl;
+  cout << v << endl;
+ }
 
 // /*******************************************************************************************************/
 // /*** Tests des operateurs de pre/post decrementation de la classe Option *******************************/
 // /*******************************************************************************************************/
-// void Essai8()
-// {
-//   cout << "**********************************************************************" << endl;
-//   cout << "(8.a) ***** Test de l'operateur de pre-decrementation ****************" << endl;
-//   cout << "**********************************************************************" << endl;
-//   Option op1("0MM0","Peinture metallisee",450.0f);
-//   cout << "Affichons d'abord op1 : " << op1 << endl;
-//   cout << "Resultat de cout << --op1 << endl; :" << endl;  
-//   cout << --op1 << endl;        // Si tout va bien, op1 est decremente avant d'etre affiche !
-//   cout << "et on reaffiche op1 : " << op1 << endl << endl;
+void Essai8()
+{
+  cout << "**********************************************************************" << endl;
+  cout << "(8.a) ***** Test de l'operateur de pre-decrementation ****************" << endl;
+  cout << "**********************************************************************" << endl;
+  Option op1("0MM0","Peinture metallisee",450.0f);
+  cout << "Affichons d'abord op1 : " << op1 << endl;
+  cout << "Resultat de cout << --op1 << endl; :" << endl;  
+  cout << --op1 << endl;        // Si tout va bien, op1 est decremente avant d'etre affiche !
+  cout << "et on reaffiche op1 : " << op1 << endl << endl;
 
-//   cout << "**********************************************************************" << endl;
-//   cout << "(8.b) ***** Test de l'operateur de post-decrementation ***************" << endl;
-//   cout << "**********************************************************************" << endl;
-//   Option op2("ZH75","Jantes alliage 15 pouces",350.0f);
-//   cout << "Affichons d'abord op2 : " << op2 << endl;
-//   cout << "Resultat de cout << op2-- << endl; :" << endl;  
-//   cout << op2-- << endl;        // Si tout va bien, op2 est decremente apres avoir ete affiche !
-//   cout << "et on reaffiche op2 : " << op2 << endl << endl;
-// }
+  cout << "**********************************************************************" << endl;
+  cout << "(8.b) ***** Test de l'operateur de post-decrementation ***************" << endl;
+  cout << "**********************************************************************" << endl;
+  Option op2("ZH75","Jantes alliage 15 pouces",350.0f);
+  cout << "Affichons d'abord op2 : " << op2 << endl;
+  cout << "Resultat de cout << op2-- << endl; :" << endl;  
+  cout << op2-- << endl;        // Si tout va bien, op2 est decremente apres avoir ete affiche !
+  cout << "et on reaffiche op2 : " << op2 << endl << endl;
+}
 
 /*******************************************************************************************************/
 /*** Tests de l'opérateur [] de la classe Voiture ******************************************************/
