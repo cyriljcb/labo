@@ -27,14 +27,14 @@ int main(int argc,char* argv[])
     {
       case 1 : Essai1(); break;
       case 2 : Essai2(); break;
-      /*case 3 : Essai3(); break;
+      case 3 : Essai3(); break;
       case 4 : Essai4(); break;
       case 5 : Essai5(); break;
-      case 6 : Essai6(); break;
+      /*case 6 : Essai6(); break;
       case 7 : Essai7(); break;
       case 8 : Essai8(); break;
-      case 9 : Essai9(); break;*/
-      default : fini = true ; break;
+      case 9 : Essai9(); break;
+      default : fini = true ; break;*/
     }
   }
 
@@ -125,66 +125,66 @@ void Essai2()
 /*******************************************************************************************************/
 /*** Tests des opérateurs - de la classe Voiture *******************************************************/
 /*******************************************************************************************************/
-// void Essai3()
-// {
-//   cout << endl << "********************************************************************" << endl;
-//   cout <<         "(3) ***** Tests des operateurs - de Voiture ************************" << endl;
-//   cout <<         "********************************************************************" << endl;
+void Essai3()
+{
+  cout << endl << "********************************************************************" << endl;
+  cout <<         "(3) ***** Tests des operateurs - de Voiture ************************" << endl;
+  cout <<         "********************************************************************" << endl;
 
-//   Voiture v3("Projet_3008_MrLegrand",Modele("3008 Acces 1.6",120,Essence,25030.0f));
-//   v3 = v3 + Option("ZV02","Vision tete haute",350.0f);
-//   v3 = v3 + Option("OK01","Toit panoramique vitre",500.0f);
-//   v3 = v3 + Option("0MM0","Peinture metallisee",570.0f);
-//   cout << "----- v3 (avant) -----------------" << endl;
-//   v3.Affiche();
-//   v3 = v3 - Option("ZV02","Vision tete haute",350.0f);  // !!!
-//   v3 = v3 - "0MM0";                                     // !!!
-//   cout << "----- v3 (apres) ------------------" << endl;
-//   v3.Affiche();
-// }
+  Voiture v3("Projet_3008_MrLegrand",Modele("3008 Acces 1.6",120,Essence,25030.0f));
+  v3 = v3 + Option("ZV02","Vision tete haute",350.0f);
+  v3 = v3 + Option("OK01","Toit panoramique vitre",500.0f);
+  v3 = v3 + Option("0MM0","Peinture metallisee",570.0f);
+  cout << "----- v3 (avant) -----------------" << endl;
+  v3.Affiche();
+  v3 = v3 - Option("ZV02","Vision tete haute",350.0f);  // !!!
+  v3 = v3 - "0MM0";                                     // !!!
+  cout << "----- v3 (apres) ------------------" << endl;
+  v3.Affiche();
+}
 
 // /*******************************************************************************************************/
 // /*** Test des opérateurs < > == de la classe Voiture ***************************************************/
 // /*******************************************************************************************************/
-// void Essai4()
-// {
-//   cout << "**********************************************************************" << endl;
-//   cout << "(4) Tests des opérateurs < > == de Voiture ***************************" << endl;
-//   cout << "**********************************************************************" << endl;
+void Essai4()
+{
+  cout << "**********************************************************************" << endl;
+  cout << "(4) Tests des opérateurs < > == de Voiture ***************************" << endl;
+  cout << "**********************************************************************" << endl;
 
-//   Voiture v1("Projet1_208_MrDugenou",Modele("208 Access 1.0",68,Essence,12500.0f));
-//   v1.AjouteOption(Option("0MM0","Peinture metallisee",450.0f));
-//   cout << "---- Projet 1 --------------------" << endl;
-//   v1.Affiche();
-//   cout << "Prix du projet 1 = " << v1.getPrix() << " euros" << endl << endl;
+  Voiture v1("Projet1_208_MrDugenou",Modele("208 Access 1.0",68,Essence,12500.0f));
+  v1.AjouteOption(Option("0MM0","Peinture metallisee",450.0f));
+  cout << "---- Projet 1 --------------------" << endl;
+  v1.Affiche();
+  cout << "Prix du projet 1 = " << v1.getPrix() << " euros" << endl << endl;
 
-//   Voiture v2("Projet2_208_MrDugenou",Modele("208 Access 1.0",68,Essence,12500.0f));
-//   v2 = v2 + Option("0MM0","Peinture metallisee",450.0f);
-//   v2 = v2 + Option("ZH75","Jante alliage leger 15 pouces",450.0f);
-//   cout << "---- Projet 2 --------------------" << endl;
-//   v2.Affiche();
-//   cout << "Prix du projet 2 = " << v2.getPrix() << " euros" << endl << endl;
+  Voiture v2("Projet2_208_MrDugenou",Modele("208 Access 1.0",68,Essence,12500.0f));
+  v2 = v2 + Option("0MM0","Peinture metallisee",450.0f);
+  v2 = v2 + Option("ZH75","Jante alliage leger 15 pouces",450.0f);
+  cout << "---- Projet 2 --------------------" << endl;
+  v2.Affiche();
+  cout << "Prix du projet 2 = " << v2.getPrix() << " euros" << endl << endl;
 
-//   cout << "---- Comparaison des projets -------------------" << endl;
-//   if (v1 < v2) cout << "Le projet 1 est moins cher" << endl;
-//   if (v1 > v2) cout << "Le projet 1 est plus cher" << endl;
-//   if (v1 == v2) cout << "Les deux projets ont le meme prix" << endl;
-// }
+  cout << "---- Comparaison des projets -------------------" << endl;
+  if (v1 < v2) cout << "Le projet 1 est moins cher" << endl;
+  if (v1 > v2) cout << "Le projet 1 est plus cher" << endl;
+  if (v1 == v2) cout << "Les deux projets ont le meme prix" << endl;
+}
 
 // *****************************************************************************************************
 // /*** Test des opérateurs << et >> de la classe Option **************************************************/
 // /*******************************************************************************************************/
-// void Essai5()
-// {
-//   cout << "**********************************************************************" << endl;
-//   cout << "(5) ***** Tests des opérateurs << et >> de Option ********************" << endl;
-//   cout << "**********************************************************************" << endl;
-//   Option o;
-//   cout << "Saisissez une nouvelle option :" << endl;
-//   cin >> o;
-//   cout << endl << "Voici l'option que vous avez encodee :" << endl;
-//   cout << o << endl << endl;
-// }
+void Essai5()
+{
+  cout << "**********************************************************************" << endl;
+  cout << "(5) ***** Tests des opérateurs << et >> de Option ********************" << endl;
+  cout << "**********************************************************************" << endl;
+  Option o;
+  cout << "Saisissez une nouvelle option :" << endl;
+  cin >> o;
+  cout << endl << "Voici l'option que vous avez encodee :" << endl;
+  cout << o << endl << endl;
+}
 
 // /*******************************************************************************************************/
 // ** Test des opérateurs << et >> de la classe Modele *************************************************

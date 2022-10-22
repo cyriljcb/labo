@@ -16,6 +16,7 @@ private:
 	string nomVoiture;
 	Modele modele;
 	Option * options[5]={0};
+	int compV(Voiture&)const;
 
 public:
 	Voiture();
@@ -39,6 +40,11 @@ public:
 
 	Voiture& operator=(const Voiture&);
 	Voiture operator+(const Option&)const;
+	Voiture operator-(const Option&)const;
+	Voiture operator-(string)const;
+	int operator< (Voiture&)const;
+	int operator> (Voiture&)const;
+	int operator== (Voiture&)const;
 
 
 

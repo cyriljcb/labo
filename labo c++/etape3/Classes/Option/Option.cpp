@@ -1,5 +1,7 @@
 #include "Option.h"
 #include <iostream>
+#include <cstdlib>
+#include <string>
 using namespace std;
 
 
@@ -124,4 +126,47 @@ void Option::Affiche()const
 	cout<<"Code : "<<code<<endl;
 	cout<<"Intitule : "<<intitule<<endl;
 	cout<<"prix des options : "<<fixed<<prix<<"f"<<endl;
+}
+
+
+/****************************************************************************/
+/***** surcharges des operateurs*********************************************/
+/****************************************************************************/
+
+
+
+
+ostream& operator<< (ostream& s, const Option& o1)
+{	/*int i;
+	for(i=0;i<5;i++)
+	{
+
+	}*/
+	s << "le code : "<< o1.code << endl;
+	s << "l'intitule : "<<o1.intitule<<endl;
+	s << "le prix des options : "<<fixed<<o1.prix<<"f"<<endl;
+	return s;
+}
+
+istream& operator>> (istream& s, Option& o1)
+{
+	string code;
+	string intitule;
+	string pr;
+	float prix =0.0;
+	cout<<"entrez le code : ";
+	getline(cin,code);
+	cout<<"entrez l'intitule : ";
+	getline(cin,intitule);
+	cout<<"entrez le prix : ";
+	getline(cin,pr);
+	prix = stof(pr);
+
+
+
+	o1.setCode(code);
+	o1.setIntitule(intitule);
+	o1.setPrix(prix);
+
+	return s;
 }
