@@ -142,6 +142,26 @@ const char* MainWindowEx3::getGroupe3()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions clics sur les boutons ////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int MainWindowEx3::StartJob(bool isSelected, const char *group)
+{
+  int idFils;
+  if(isSelected && group != NULL)
+  {
+      if((idFils= fork() ) == 0)
+      {
+        //processus fils1
+        
+        if(execlp("Lecture","Lecture",group,NULL) ==-1)
+        {
+          perror("erreur de execl()");
+          exit(1);
+        }
+    
+      }
+  }
+  return idFils;
+}
+
 void MainWindowEx3::on_pushButtonLancerRecherche_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Lancer Recherche\n");
@@ -160,48 +180,11 @@ void MainWindowEx3::on_pushButtonLancerRecherche_clicked()
     exit(1);
   }
   
-  if(ui->checkBoxRecherche1->isChecked()&& getGroupe1() != NULL)
-  {
-      if((idFils1= fork() ) == 0)
-      {
-        //processus fils1
-        
-        if(execlp("Lecture","Lecture",getGroupe1(),NULL) ==-1)
-        {
-          perror("erreur de execl()");
-          exit(1);
-        }
-    
-      }
-  }
-  if(ui->checkBoxRecherche2->isChecked()&& getGroupe2() != NULL)
-  {
-      if((idFils2= fork() ) == 0)
-      {
-        //processus fils2
-        
-        if(execlp("Lecture","Lecture",getGroupe2(),NULL) ==-1)
-        {
-          perror("erreur de execl()");
-          exit(1);
-        }
-    
-      }
-  }
-  if(ui->checkBoxRecherche3->isChecked()&& getGroupe3() != NULL)
-  {
-      if((idFils3= fork() ) == 0)
-      {
-        //processus fils3
-        
-        if(execlp("Lecture","Lecture",getGroupe3(),NULL) ==-1)
-        {
-          perror("erreur de execl()");
-          exit(1);
-        }
-    
-      }
-  }
+  idFils1 = StartJob(recherche1Selectionnee(), getGroupe1());
+  idFils2 = StartJob(recherche2Selectionnee(), getGroupe2());
+  idFils3 = StartJob(recherche3Selectionnee(), getGroupe3());
+
+  
 
   //processus pere
   while((id = wait(&status)) !=-1)
@@ -233,11 +216,9 @@ void MainWindowEx3::on_pushButtonLancerRecherche_clicked()
 
     }
   }
-
-  
-
-
 }
+
+
 
 void MainWindowEx3::on_pushButtonVider_clicked()
 {

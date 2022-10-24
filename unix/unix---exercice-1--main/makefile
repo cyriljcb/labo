@@ -19,4 +19,4 @@ moc_mainwindow.o:	moc_mainwindow.cpp
 
 
 clean : 
-		rm -f mainwindow.o core
+		rm -f mainwindow.o main.o moc_mainwindow.o core
