@@ -96,7 +96,7 @@ Voiture::~Voiture()
 
 /********GETTERS*****************************/
 
-const string Voiture::getNom()const
+string Voiture::getNom()const
 {
 
 	return nomVoiture;
@@ -198,7 +198,7 @@ void Voiture::RetireOption(string code)
 	}
 }
 
-float Voiture::getPrix()
+float Voiture::getPrix()const
 {
 	float prix_total = modele.getPrixDeBase();
 
@@ -232,6 +232,12 @@ Voiture& Voiture::operator=(const Voiture& v1)
 	
 	setNom(v1.getNom());
 	setModele(v1.getModele());
+	for(i=0;i<5;i++)
+	{
+		if(options[i]!= NULL)
+			delete options[i];
+	}
+	
 	for(i = 0;i<5;i++)
 	{
 		if(v1.options[i]!=NULL)
@@ -277,19 +283,19 @@ Voiture Voiture::operator-(const Option& o1)const
 	return v;
 }
 
-int Voiture::operator<(Voiture& v1) const
+int Voiture::operator<(const Voiture& v1) const
 {
 	return compV(v1)==-1;
 }
-int Voiture::operator>(Voiture& v1) const
+int Voiture::operator>(const Voiture& v1) const
 {
 	return compV(v1)==1;
 }
-int Voiture::operator==(Voiture& v1)const
+int Voiture::operator==(const Voiture& v1)const
 {
 	return compV(v1)==0;
 }
-int Voiture::compV(Voiture& v1)const
+int Voiture::compV(const Voiture& v1)const
 {
 	Voiture v(*this);
 	if(v.getPrix()< v1.getPrix())

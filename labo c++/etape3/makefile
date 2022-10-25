@@ -13,7 +13,7 @@ CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO)    #quettier dit qu'on ne pe
 
 Test3:		Test3.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o
 	# g++ Test1.cpp $(CLASSE)Modele.o -I Classes/ -o Test1
-	echo "Creation de Test2c"
+	echo "Creation de Test3"
 	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) Test3.cpp -o Test3
 	
 

@@ -17,7 +17,7 @@ private:
 	string nomVoiture;
 	Modele modele;
 	Option * options[5]={0};
-	int compV(Voiture&)const;
+	int compV(const Voiture&)const;
 
 public:
 	Voiture();
@@ -28,10 +28,10 @@ public:
 	void AjouteOption(const Option &);
 	void RetireOption(string);
 
-	const string getNom()const;
+	string getNom()const;
 
 	Modele getModele()const;
-	float getPrix();
+	float getPrix()const;
 
 
 	void setNom(const string &);
@@ -43,9 +43,9 @@ public:
 	Voiture operator+(const Option&)const;
 	Voiture operator-(const Option&)const;
 	Voiture operator-(string)const;
-	int operator< (Voiture&)const;
-	int operator> (Voiture&)const;
-	int operator== (Voiture&)const;
+	int operator< (const Voiture&)const;
+	int operator> (const Voiture&)const;
+	int operator== (const Voiture&)const;
 	Option* operator[](int);
 
 
