@@ -186,17 +186,16 @@ void Voiture::RetireOption(string code)
 {
 	unsigned long i=0;
 
-	while(i<5)
+	for(i=0;i<5;i++)
 	{
-		if(options[i]!= NULL && options[i]->getCode() != code)
+		if(options[i]!=NULL && (options[i]->getCode() == code))
 		{
 			delete options[i];
-			options[i] = NULL;
-			i = 5;
+			options[i]=NULL;
+			
 		}
-		i++;
-	}
 
+	}
 }
 
 float Voiture::getPrix()
@@ -239,6 +238,10 @@ Voiture& Voiture::operator=(const Voiture& v1)
 		{
 			options[i]= new Option(*v1.options[i]);	
 		}
+		else
+		{
+			options[i]=NULL;
+		}
 	}
 
 	return (*this);
@@ -263,7 +266,6 @@ Voiture Voiture::operator-(string code)const
 {
 	
 	Voiture v(*this);
-	
 	v.RetireOption(code);	
 	return v;
 }
@@ -271,7 +273,6 @@ Voiture Voiture::operator-(const Option& o1)const
 {
 	
 	Voiture v(*this);
-	
 	v.RetireOption(o1.getCode());
 	return v;
 }
@@ -300,7 +301,20 @@ int Voiture::compV(Voiture& v1)const
 
 ostream& operator<< (ostream& s, const Voiture& v1)
 {	
-	v1.Affiche();
+    s<<"Nom de la voiture : "<< v1.getNom()<<endl;
+    v1.getModele();
+    v1.modele.Affiche();
+    for(int i = 0; i<5;i++)
+    {
+    	if (v1.options[i] != NULL)
+                   v1.options[i]->Affiche();
+    }
 
 	return s;
+}
+
+Option* Voiture::operator[](int i)
+{
+	return options[i];
+
 }

@@ -153,11 +153,11 @@ istream& operator>> (istream& s, Option& o1)
 	string pr;
 	float prix =0.0;
 	cout<<"entrez le code : ";
-	getline(cin,code);
+	getline(s,code);
 	cout<<"entrez l'intitule : ";
-	getline(cin,intitule);
+	getline(s,intitule);
 	cout<<"entrez le prix : ";
-	getline(cin,pr);
+	getline(s,pr);
 	prix = stof(pr);
 
 	o1.setCode(code);

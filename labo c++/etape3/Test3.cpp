@@ -33,7 +33,7 @@ int main(int argc,char* argv[])
       case 6 : Essai6(); break;
       case 7 : Essai7(); break;
       case 8 : Essai8(); break;
-      /*case 9 : Essai9(); break;*/
+      case 9 : Essai9(); break;
       default : fini = true ; break;
     }
   }
@@ -151,7 +151,6 @@ void Essai4()
   cout << "**********************************************************************" << endl;
   cout << "(4) Tests des opérateurs < > == de Voiture ***************************" << endl;
   cout << "**********************************************************************" << endl;
-
   Voiture v1("Projet1_208_MrDugenou",Modele("208 Access 1.0",68,Essence,12500.0f));
   v1.AjouteOption(Option("0MM0","Peinture metallisee",450.0f));
   cout << "---- Projet 1 --------------------" << endl;
@@ -248,7 +247,7 @@ void Essai8()
 /*******************************************************************************************************/
 /*** Tests de l'opérateur [] de la classe Voiture ******************************************************/
 /*******************************************************************************************************/
-/*void Essai9()
+void Essai9()
 {
   cout << "**********************************************************************" << endl;
   cout << "(9) ***** Tests de l'opérateur [] de Voiture *************************" << endl;
@@ -275,4 +274,3 @@ void Essai8()
   }
 }
 
-*/

@@ -46,6 +46,7 @@ public:
 	int operator< (Voiture&)const;
 	int operator> (Voiture&)const;
 	int operator== (Voiture&)const;
+	Option* operator[](int);
 
 
 

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string.h>
 #include <string>
+#include <stdlib.h>
 
 //#define DEBUG
 
@@ -172,18 +173,17 @@ ostream& operator<< (ostream& s, const Modele& m)
 	s << "le moteur : ";
 	switch(m.getMoteur()){
 		case Essence : 
-			cout<<"Essence "<<endl;
+			s<<"Essence "<<endl;
 		break;
 		case Diesel : 
-			cout<<"Diesel"<<endl;
+			s<<"Diesel"<<endl;
 		break;
 		case Electrique : 
-			cout<<"Electrique"<<endl;
+			s<<"Electrique"<<endl;
 		break;
 		case Hybride : 
-			cout<<"Hybride"<<endl;
+			s<<"Hybride"<<endl;
 		break;
-	cout<<endl;
 	}
 	//m.Affiche();
 	return s;
@@ -200,18 +200,19 @@ istream& operator>> (istream& s, Modele& m)
 	int choixMoteur;
 
 	cout<<"entrez le nom : ";
-	getline(cin,nom);
+	getline(s,nom);
 	size_t size = nom.size() + 1;
 	char  n[size];
 	strncpy( n, nom.c_str(), size );
 	m.setNom(n);
 	cout<<"entrez la puissance : ";
-	getline(cin,puis);
+	getline(s,puis);
+	
 	puissance = stoi(puis);
 
 	m.setPuissance(puissance);
 	cout<<"entrez le prix : ";
-	getline(cin,pr);
+	getline(s,pr);
 	prix = stof(pr);
 	m.setPrixDeBase(prix);
 	cout << "pour selectionner le moteur, entrez "<<endl;
@@ -231,7 +232,6 @@ istream& operator>> (istream& s, Modele& m)
 		case 4 : 
 			m.setMoteur(Hybride);
 		break;
-	cout<<endl;
 	}
 
 	return s;
