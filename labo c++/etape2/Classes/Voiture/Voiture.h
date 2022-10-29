@@ -28,13 +28,8 @@ public:
 	Modele getModele()const;
 	float getPrix();
 
-
 	void setNom(const string &);
 	void setModele(const Modele &);
-	
-
-
-
 
 	void Affiche()const;
 

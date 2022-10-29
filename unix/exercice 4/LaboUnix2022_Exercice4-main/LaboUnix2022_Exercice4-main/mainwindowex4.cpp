@@ -31,6 +31,11 @@ MainWindowEx4::MainWindowEx4(QWidget *parent):QMainWindow(parent),ui(new Ui::Mai
   A.sa_handler = HandlerSIGCHLD;
   sigemptyset(&A.sa_mask);
   A.sa_flags = 0;
+
+  if (sigaction(SIGCHLD, &A, NULL) == -1){
+      perror("Erreur de sigaction !");
+      exit(1);
+    }
 }
 
 MainWindowEx4::~MainWindowEx4()
@@ -161,13 +166,33 @@ const char* MainWindowEx4::getGroupe3()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions clics sur les boutons ////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int MainWindowEx4::StartJob(bool isSelected, const char *group)
+{
+  int idFils;
+  char buff[50];
+  if(isSelected && group != NULL)
+  {
+      if((idFils= fork() ) == 0)
+      {
+        //processus fils1
+        sprintf(buff, "%d", 200);
+        
+        if(execlp("Taitement","TraitementFils1",group,buff,NULL) ==-1)
+        {
+          perror("erreur de execl()");
+          exit(1);
+        }
+    
+      }
+  }
+  return idFils;
+}
+
 void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Demarrer Traitements\n");
   // TO DO
-  
-  int status,id;
-  char buf[10];
+  char buff[50];
   int fd;
 
   
@@ -190,33 +215,40 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
   }*/
 
 
-  if(ui->checkBoxTraitement1->isChecked() && getGroupe1() != NULL)
+  /*idFils1 = StartJob(traitement1Selectionne(), getGroupe1());
+  idFils2 = StartJob(traitement2Selectionne(), getGroupe2());
+  idFils3 = StartJob(traitement3Selectionne(), getGroupe3());*/
+
+  if(traitement1Selectionne() && getGroupe1() != NULL)
   {
     if((idFils1 = fork()) == 0)
     {
-      if(execl("Traitement","Traitement",getGroupe1(),200,NULL) == -1)
+      sprintf(buff, "%d", 200);
+      if(execl("Traitement","TraitementFils1",getGroupe1(),buff,NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);
       }
     }
   }
-  if(ui->checkBoxTraitement2->isChecked() && getGroupe2() != NULL)
+  if(traitement2Selectionne() && getGroupe2() != NULL)
   {
     if((idFils2 = fork()) == 0)
     {
-      if(execl("Traitement","Traitement",getGroupe2(),450,NULL) == -1)
+      sprintf(buff, "%d", 450);
+      if(execl("Traitement","TraitementFils2",getGroupe2(),buff,NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);
       }
     }
   }
-  if(ui->checkBoxTraitement3->isChecked() && getGroupe3() != NULL)
+  if(traitement3Selectionne()&& getGroupe3() != NULL)
   {
     if((idFils3 = fork()) == 0)
     {
-      if(execl("Traitement","Traitement",getGroupe3(),700,NULL) == -1)
+      sprintf(buff, "%d", 700);
+      if(execl("Traitement","TraitementFils3",getGroupe3(),buff,NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);
@@ -249,19 +281,50 @@ void MainWindowEx4::on_pushButtonQuitter_clicked()
 void MainWindowEx4::on_pushButtonAnnuler1_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Annuler1\n");
-  // TO DO
+  if(traitement1Selectionne()&&getGroupe1()!=NULL)
+  {
+    if(kill(idFils1,0)==0)
+    {
+      kill(idFils1,SIGUSR1);
+    }
+    else
+    {
+      perror("erreur du kill");
+    }
+  }
 }
 
 void MainWindowEx4::on_pushButtonAnnuler2_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Annuler2\n");
-  // TO DO
+  if(traitement2Selectionne()&&getGroupe2()!=NULL)
+  {
+    if(kill(idFils2,0)==0)
+    {
+      kill(idFils2,SIGUSR1);
+
+    }
+    else
+    {
+      perror("erreur du kill");
+    }
+  }
 }
 
 void MainWindowEx4::on_pushButtonAnnuler3_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Annuler3\n");
-  // TO DO
+  if(traitement3Selectionne()&&getGroupe3()!=NULL)
+  {
+    if(kill(idFils3,0)==0)
+    {
+      kill(idFils3,SIGUSR1);
+    }
+    else
+    {
+      perror("erreur du kill");
+    }
+  }
 }
 
 void MainWindowEx4::on_pushButtonAnnulerTous_clicked()
@@ -277,12 +340,18 @@ void MainWindowEx4::on_pushButtonAnnulerTous_clicked()
 // TO DO : HandlerSIGCHLD
 void HandlerSIGCHLD(int Sig)
 {
-  int id, status;
-  id = wait(&status);
-  fprintf(stderr,"\nsuppression du fils %d de la table des processus\n",id);
-  if(WIFEXITED(status))
-  {
-    fprintf(stderr,"le fils %d s'est arreté par un exit(%d)\n",id,WEXITSTATUS(status));
-
+  int id, status;  
+   if ((id = wait(&status)) != -1)
+   {
+    if (WIFEXITED(status))
+    {
+      if (id == idFils1)
+        w->setResultat1(WEXITSTATUS(status));
+      else if (id == idFils2)
+        w->setResultat2(WEXITSTATUS(status));
+      else if (id == idFils3)
+        w->setResultat3(WEXITSTATUS(status));
+    }
   }
+  
 }

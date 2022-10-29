@@ -46,6 +46,10 @@ MainWindowTraitement::MainWindowTraitement(QWidget *parent):QMainWindow(parent),
 
   // armement de SIGUSR1
   // TO DO
+  struct sigaction sigusr;
+  sigusr.sa_handler = 0;
+  sigemptyset(&sigusr.sa_mask);
+  sigaction(SIGUSR1,&sigusr,NULL);
 
   // Demande d'envoi de SIGALRM dans 1 seconde
   alarm(1); 
@@ -106,5 +110,6 @@ void handlerSIGALRM(int sig)
 void handlerSIGUSR1(int sig)
 {
   fprintf(stderr,"(Traitement %d) Reception du signal SIGALRM (%d)\n",getpid(),sig);
+  exit (compteur);
   
 }

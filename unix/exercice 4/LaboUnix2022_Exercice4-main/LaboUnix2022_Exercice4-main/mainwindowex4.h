@@ -27,6 +27,7 @@ public:
     const char* getGroupe1();
     const char* getGroupe2();
     const char* getGroupe3();
+    int StartJob(bool isSelected, const char *group);
 
 private slots:
     void on_pushButtonDemarrerTraitements_clicked();
