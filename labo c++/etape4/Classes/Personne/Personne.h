@@ -14,17 +14,20 @@ class Personne
 		string prenom;
 
 	public :
-		Persone();
-		Personne(string&, string&);
+		Personne();
+		Personne(const string&,const string&);
 		Personne(const Personne&);
 		~Personne();
 
 		string getNom()const;
 		string getPrenom()const;
 
-		void setNom(string &);
-		void setPrenom(string &);
+		void setNom(const string &);
+		void setPrenom(const string &);
 
 		Personne& operator=(const Personne&);
 
-}
+		void Affiche()const;
+
+};
+#endif

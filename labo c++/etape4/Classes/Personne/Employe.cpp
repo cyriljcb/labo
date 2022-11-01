@@ -1,4 +1,4 @@
-#include "Personne.h"
+#include "Employe.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -10,49 +10,51 @@ using namespace std;
 
 /********constructeur par défaut****************/
 
-Personne::Personne()
+Employe::Employe()
 {
-	#ifdef DEBUG
-		cout <<"Constructeur par defaut de Personne"<<endl;
-	#endif
+		cout <<"Constructeur par defaut de Employe"<<endl;
 
 	nom = "";
 	prenom = "";
+	numero = 0;
+	login = "";
+	*mdp = NULL;
 
 }
 
 /********constructeur par initialisation*******/
-Personne::Personne(const string& n ,const string& p)
+Employe::Employe(const string &n, const string &p, int num, const string & l, const string & m)
 {
-	#ifdef DEBUG
-		cout <<"Constructeur par initialisation de Personne"<<endl;
-	#endif
+	cout <<"Constructeur par initialisation de Employe"<<endl;
 
 	setNom(n);
 	setPrenom(p);
+	setNumero(num);
+	setLogin(l);
+	setMotDePasse(m);
 
 }
 
 /********constructeur par copie****************/
-Personne::Personne (const Personne &source)
+Employe::Employe (const Employe &source)
 {
-	#ifdef DEBUG
-		cout <<"Constructeur par copie de Personne"<<endl;
-	#endif
+
+	cout <<"Constructeur par copie de Employe"<<endl;
 
 	setNom(source.getNom());
 	setPrenom(source.getPrenom());
+	setNumero(source.getNumero());
+	setLogin(source.getLogin());
+	setMotDePasse(source.getMotDePasse());
+	
 
 }
 
 /*******destructeur****************************/
 
-Personne::~Personne()
+Employe::~Employe()
 {
-	#ifdef DEBUG
-		cout <<"destructeur par copie de Personne"<<endl;
-	#endif
-
+	cout <<"destructeur par copie de Employe"<<endl;
 }
 
 /****************************************************************************/
@@ -61,71 +63,52 @@ Personne::~Personne()
 
 /********GETTERS*****************************/
 
-string Personne::getNom()const
+string Employe::getLogin()const
 {
 
-	return nom;
+	return login;
 
 }
 
-string Personne::getPrenom()const
+string* Employe::getMotDePasse()const
 {
 
-	return prenom;
+	return mdp;
+
 }
+
+
 
 /*********SETTERS***********************/
 
 
-void Personne::setNom (const string & n)
+void Employe::setLogin (const string l)
 {
-	nom = n;
+	login = l;
 }
 
-void Personne::setPrenom(const string & p)
+void Employe::setMotDePasse(const string& m)
 {
-	prenom = p;
+	mdp = m;
 }
+
 
 
 /****************************************************************************/
 /***** Méthodes publiques ***************************************************/
 /****************************************************************************/
-void Personne::Affiche()const
-{
-	cout<<"Nom "<<nom<<endl;
-	cout<<"prenom : "<<prenom<<endl;
-}
 
-Personne& Personne::operator=(const Personne& p1)
+Employe& Employe::operator=(const Employe& e)
 {
-	setNom(p1.getNom());
-	setPrenom(p1.getPrenom());
+	setLogin(e.getLogin());
+	setMDP(e.getMDP());
 	return (*this);
 }
 
-ostream& operator<< (ostream& s, const Personne& p1)
+ostream& operator<< (ostream& s, const Employe& e)
 {	
-	s << "le nom : "<< p1.nom << endl;
-	s << "le prénom : "<<p1.prenom<<endl;
+	s << "le login : "<< e.login << endl;
+	s << "le mot de passe : "<<e.motDePasse<<endl;
 	return s;
 
-}
-
-istream& operator>> (istream& s,Personne& p)
-{
-
-	string nom;
-	string prenom;
-	string pr;
-	
-	cout<<"entrez le nom : ";
-	getline(s,nom);
-	cout<<"entrez le prenom : ";
-	getline(s,prenom);
-	p.setNom(nom);
-	p.setPrenom(prenom);
-	
-
-	return s;
 }

@@ -71,7 +71,7 @@ int Intervenant::getNumero()const
 /*********SETTERS***********************/
 
 
-void Personne::setNumero (const int n)
+void Intervenant::setNumero (int n)
 {
 	numero = n;
 }
@@ -82,7 +82,7 @@ void Personne::setNumero (const int n)
 /***** Méthodes publiques ***************************************************/
 /****************************************************************************/
 
-Intervenant& operator=(const Intervenant& i1)
+Intervenant& Intervenant::operator=(const Intervenant& i1)
 {
 	setNumero(i1.getNumero());
 	return (*this);
