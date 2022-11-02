@@ -2,8 +2,11 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <sstream>
+#include <string.h>
 using namespace std;
-
+const string Employe::ADMINISTRATIF = "Administratif";
+const string Employe::VENDEUR = "Vendeur";
 /****************************************************************************/
 /***** Constructeurs et destructeurs ****************************************/
 /****************************************************************************/
@@ -18,12 +21,12 @@ Employe::Employe()
 	prenom = "";
 	numero = 0;
 	login = "";
-	*mdp = NULL;
+	fonction = "";
 
 }
 
 /********constructeur par initialisation*******/
-Employe::Employe(const string &n, const string &p, int num, const string & l, const string & m)
+Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f)
 {
 	cout <<"Constructeur par initialisation de Employe"<<endl;
 
@@ -31,7 +34,7 @@ Employe::Employe(const string &n, const string &p, int num, const string & l, co
 	setPrenom(p);
 	setNumero(num);
 	setLogin(l);
-	setMotDePasse(m);
+	setFonction(f);
 
 }
 
@@ -46,6 +49,7 @@ Employe::Employe (const Employe &source)
 	setNumero(source.getNumero());
 	setLogin(source.getLogin());
 	setMotDePasse(source.getMotDePasse());
+	setFonction(source.getFonction());
 	
 
 }
@@ -70,11 +74,15 @@ string Employe::getLogin()const
 
 }
 
-string* Employe::getMotDePasse()const
+string Employe::getMotDePasse()const
 {
 
-	return mdp;
+	return *motDePasse;
 
+}
+string Employe::getFonction()const
+{
+	return fonction;
 }
 
 
@@ -82,14 +90,19 @@ string* Employe::getMotDePasse()const
 /*********SETTERS***********************/
 
 
-void Employe::setLogin (const string l)
+void Employe::setLogin (const string& l)
 {
 	login = l;
 }
 
-void Employe::setMotDePasse(const string& m)
+void Employe::setMotDePasse(const string m)
 {
-	mdp = m;
+	motDePasse = new string;
+	*motDePasse = m;
+}
+void Employe::setFonction(const string& f)
+{
+	fonction = f;
 }
 
 
@@ -97,18 +110,62 @@ void Employe::setMotDePasse(const string& m)
 /****************************************************************************/
 /***** Méthodes publiques ***************************************************/
 /****************************************************************************/
+void Employe::ResetMotDePasse()
+{
+	delete motDePasse;
+}
 
 Employe& Employe::operator=(const Employe& e)
 {
+	setNom(e.getNom());
+	setPrenom(e.getPrenom());
+	setNumero(e.getNumero());
 	setLogin(e.getLogin());
-	setMDP(e.getMDP());
+	setMotDePasse(e.getMotDePasse());
+	setFonction(e.getFonction());
 	return (*this);
 }
 
 ostream& operator<< (ostream& s, const Employe& e)
 {	
+
+	s << "le nom : "<<e.nom<<endl;
+	s << "le prenom : "<<e.prenom<<endl;
+	s << "le numero : "<<e.numero<<endl;
 	s << "le login : "<< e.login << endl;
-	s << "le mot de passe : "<<e.motDePasse<<endl;
+	//s << "le mot de passe : "<<e.getMotDePasse()<<endl;
+	s << "fonction : "<<e.fonction<<endl;
 	return s;
 
+}
+
+string Employe::ToString()const
+{
+	ostringstream oss;  //sert a creer un flux de sortie
+    string tmp="[";
+    string role = getFonction();
+    if(role == "Vendeur")
+    {
+    	tmp+="V";
+    }
+    else
+    	tmp+="A";
+    oss << getNumero();
+ 	string str = oss.str();
+    tmp+=str;
+    tmp+="] ";
+    tmp+=getNom();
+    tmp+= " ";
+    tmp+=getPrenom();
+    return tmp;
+}
+
+string Employe::Tuple()const
+{
+	ostringstream oss;
+	oss << getNumero();
+ 	string tmp = oss.str();
+	string pointv =";";
+	tmp += pointv + getNom() + pointv+ getPrenom()+ pointv+getFonction();
+	return tmp;
 }

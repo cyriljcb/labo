@@ -17,10 +17,10 @@ OBJSC=Classes/Personne/Client.o
 CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP)    #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
-Test4:		Test4.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o $(CLASSESP)Personne.o $(CLASSESP)Intervenant.o $(CLASSESP)Client.o  
+Test4:		Test4.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o $(CLASSESP)Personne.o $(CLASSESP)Intervenant.o $(CLASSESP)Client.o $(CLASSESP)Employe.o
 	# g++ Test1.cpp $(CLASSE)Modele.o -I Classes/ -o Test1
 	echo "Creation de Test4"
-	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(OBJSP) $(OBJSI) $(OBJSC) Test4.cpp -o Test4
+	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(OBJSP) $(OBJSI) $(OBJSC) $(OBJSE) Test4.cpp -o Test4
 	
 
 $(CLASSESM)Modele.o:	$(CLASSESM)Modele.cpp
