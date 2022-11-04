@@ -14,20 +14,17 @@ using namespace std;
 Client::Client()
 {
 		cout <<"Constructeur par defaut de Client"<<endl;
-	nom = "";
-	prenom = "";
-	numero = 0;
 	gsm = "";
 
 }
 
 /********constructeur par initialisation*******/
-Client::Client(const string& n,const string &p, int num, const string & g)
+Client::Client(const string& n,const string &p, int num, const string & g):Intervenant(n,p,num)
 {
 	cout <<"Constructeur par initialisation de Client"<<endl;
-	setNom(n);
+	/*setNom(n);
 	setPrenom(p);
-	setNumero(num);
+	setNumero(num);*/
 	setGsm(g);
 
 }

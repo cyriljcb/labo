@@ -10,7 +10,7 @@ using namespace std;
 
 /********constructeur par défaut****************/
 
-Intervenant::Intervenant()
+Intervenant::Intervenant(): Personne()
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par defaut de Intervenant"<<endl;
@@ -21,13 +21,13 @@ Intervenant::Intervenant()
 }
 
 /********constructeur par initialisation*******/
-Intervenant::Intervenant(int n)
+Intervenant::Intervenant(const string n, const string p, int num): Personne(n,p)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par initialisation de Intervenant"<<endl;
 	#endif
 
-	setNumero(n);
+	setNumero(num);
 
 }
 

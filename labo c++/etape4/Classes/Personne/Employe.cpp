@@ -133,7 +133,11 @@ ostream& operator<< (ostream& s, const Employe& e)
 	s << "le prenom : "<<e.prenom<<endl;
 	s << "le numero : "<<e.numero<<endl;
 	s << "le login : "<< e.login << endl;
-	//s << "le mot de passe : "<<e.getMotDePasse()<<endl;
+	if(e.motDePasse != NULL)
+	{
+		s << "le mot de passe : "<<e.motDePasse<<endl;
+
+	}
 	s << "fonction : "<<e.fonction<<endl;
 	return s;
 

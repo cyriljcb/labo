@@ -13,7 +13,7 @@ class Intervenant: public Personne
 
 	public: 
 		Intervenant();
-		Intervenant(int);
+		Intervenant(const string,const string,int);
 		Intervenant(const Intervenant &);
 		~Intervenant();
 		virtual string ToString()const = 0;
