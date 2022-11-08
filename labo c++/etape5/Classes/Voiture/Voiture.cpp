@@ -172,17 +172,7 @@ void Voiture::AjouteOption(const Option & opt)
 
 		if(options[i]==NULL && i<5)
 		{
-			// printf("yyyyyyyyy");
-			// size_t size = (options[i]->getCode()).size() + 1; // + 1 pour le caractère '\0' de fin 
-		 //    char * buffer = new char[ size ]; 
-		 //    strncpy( buffer,(options[i]->getCode()).c_str(), size );
-		 //    printf("zzzzzzzzzzzz");
-		 //    size_t size1 = (opt.getCode()).size() + 1; // + 1 pour le caractère '\0' de fin 
-		 //    char * buffer1 = new char[ size1 ]; 
-		 //    strncpy( buffer1,(opt.getCode()).c_str(), size1 ); 
-		 //    printf("aaaaaaaa");
-			// if(strcmp(buffer,buffer1)==0)
-			// 	throw OptionException("cette option est déjà présente");
+		
 			options[i]=new Option (opt);
 			cpt=1;		
 		}
