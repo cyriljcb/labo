@@ -21,7 +21,7 @@ Intervenant::Intervenant(): Personne()
 }
 
 /********constructeur par initialisation*******/
-Intervenant::Intervenant(const string n, const string p, int num): Personne(n,p)
+Intervenant::Intervenant(string n,  string p, int num): Personne(n,p)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par initialisation de Intervenant"<<endl;
@@ -32,7 +32,7 @@ Intervenant::Intervenant(const string n, const string p, int num): Personne(n,p)
 }
 
 /********constructeur par copie****************/
-Intervenant::Intervenant (const Intervenant &source)
+Intervenant::Intervenant (const Intervenant &source):Personne(source)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par copie de Intervenant"<<endl;
@@ -47,10 +47,7 @@ Intervenant::Intervenant (const Intervenant &source)
 
 Intervenant::~Intervenant()
 {
-	#ifdef DEBUG
-		cout <<"destructeur par copie de Intervenant"<<endl;
-	#endif
-
+	cout <<"destructeur par copie de Intervenant"<<endl;
 }
 
 /****************************************************************************/

@@ -13,9 +13,9 @@ class Intervenant: public Personne
 
 	public: 
 		Intervenant();
-		Intervenant(const string,const string,int);
+		Intervenant(string,string,int);
 		Intervenant(const Intervenant &);
-		~Intervenant();
+		virtual ~Intervenant();
 		virtual string ToString()const = 0;
 		virtual string Tuple()const = 0;
 

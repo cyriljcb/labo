@@ -228,7 +228,7 @@ float Voiture::getPrix()const
 
 Voiture& Voiture::operator=(const Voiture& v1)
 {
-	int i,a;
+	int i;
 	
 	setNom(v1.getNom());
 	setModele(v1.getModele());

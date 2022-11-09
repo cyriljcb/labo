@@ -14,7 +14,7 @@ using namespace std;
 Client::Client()
 {
 		cout <<"Constructeur par defaut de Client"<<endl;
-	gsm = "";
+	gsm = "pas de gsm";
 
 }
 
@@ -22,22 +22,15 @@ Client::Client()
 Client::Client(const string& n,const string &p, int num, const string & g):Intervenant(n,p,num)
 {
 	cout <<"Constructeur par initialisation de Client"<<endl;
-	/*setNom(n);
-	setPrenom(p);
-	setNumero(num);*/
 	setGsm(g);
 
 }
 
 /********constructeur par copie****************/
-Client::Client (const Client &source)
+Client::Client (const Client &source):Intervenant(source)
 {
 
 	cout <<"Constructeur par copie de Client"<<endl;
-
-	setNom(source.getNom());
-	setPrenom(source.getPrenom());
-	setNumero(source.getNumero());
 	setGsm(source.getGsm());
 	
 
@@ -67,7 +60,7 @@ string Client::getGsm()const
 /*********SETTERS***********************/
 
 
-void Client::setGsm (const string g)
+void Client::setGsm ( string g)
 {
 	gsm = g;
 }

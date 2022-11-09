@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <string.h>
+#include "Intervenant.h"
 using namespace std;
 const string Employe::ADMINISTRATIF = "Administratif";
 const string Employe::VENDEUR = "Vendeur";
@@ -13,41 +14,34 @@ const string Employe::VENDEUR = "Vendeur";
 
 /********constructeur par défaut****************/
 
-Employe::Employe()
+Employe::Employe():Intervenant()
 {
 		cout <<"Constructeur par defaut de Employe"<<endl;
 
-	nom = "";
-	prenom = "";
-	numero = 0;
-	login = "";
-	fonction = "";
+	login = "pas de login";
+	fonction = "pas de fonction";
+	motDePasse = NULL;
 
 }
 
 /********constructeur par initialisation*******/
-Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f)
+Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f):Intervenant(n,p,num)
 {
 	cout <<"Constructeur par initialisation de Employe"<<endl;
 
-	setNom(n);
-	setPrenom(p);
-	setNumero(num);
 	setLogin(l);
+	motDePasse = NULL;
 	setFonction(f);
 
 }
 
 /********constructeur par copie****************/
-Employe::Employe (const Employe &source)
+Employe::Employe (const Employe &source):Intervenant(source)
 {
 
 	cout <<"Constructeur par copie de Employe"<<endl;
-
-	setNom(source.getNom());
-	setPrenom(source.getPrenom());
-	setNumero(source.getNumero());
 	setLogin(source.getLogin());
+	motDePasse=NULL;
 	setMotDePasse(source.getMotDePasse());
 	setFonction(source.getFonction());
 	
@@ -59,6 +53,8 @@ Employe::Employe (const Employe &source)
 Employe::~Employe()
 {
 	cout <<"destructeur par copie de Employe"<<endl;
+	if(motDePasse!=NULL)
+		delete motDePasse;
 }
 
 /****************************************************************************/
@@ -95,8 +91,10 @@ void Employe::setLogin (const string& l)
 	login = l;
 }
 
-void Employe::setMotDePasse(const string m)
+void Employe::setMotDePasse( string m)
 {
+	if (motDePasse!=NULL)
+		delete motDePasse;
 	motDePasse = new string;
 	*motDePasse = m;
 }
@@ -112,7 +110,9 @@ void Employe::setFonction(const string& f)
 /****************************************************************************/
 void Employe::ResetMotDePasse()
 {
-	delete motDePasse;
+	if(motDePasse!=NULL)
+		delete motDePasse;
+	motDePasse=NULL;
 }
 
 Employe& Employe::operator=(const Employe& e)
@@ -135,7 +135,7 @@ ostream& operator<< (ostream& s, const Employe& e)
 	s << "le login : "<< e.login << endl;
 	if(e.motDePasse != NULL)
 	{
-		s << "le mot de passe : "<<e.motDePasse<<endl;
+		s << "le mot de passe : "<<e.getMotDePasse()<<endl;
 
 	}
 	s << "fonction : "<<e.fonction<<endl;

@@ -19,7 +19,7 @@ class Client: public Intervenant
 		~Client();
 
 		string getGsm()const;
-		void setGsm(const string);
+		void setGsm(string);
 
 		Client& operator= (const Client&);
 		string ToString()const;

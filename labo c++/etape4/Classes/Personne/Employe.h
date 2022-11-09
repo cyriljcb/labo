@@ -27,7 +27,7 @@ class Employe: public Intervenant
 		string getLogin()const;
 		void setLogin(const string&);
 		string getMotDePasse()const;
-		void setMotDePasse(const string);
+		void setMotDePasse(string);
 		string getFonction()const;
 		void setFonction(const string &);
 
