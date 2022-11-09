@@ -9,26 +9,20 @@ using namespace std;
 /****************************************************************************/
 
 /********constructeur par initialisation*******/
-OptionException::OptionException(const string& m)
+OptionException::OptionException(const string& m):Exception(m)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par initialisation de OptionException"<<endl;
 	#endif
 
-	setMessage(m);
-
 }
 
 /********constructeur par copie****************/
-OptionException::OptionException (const OptionException &source)
+OptionException::OptionException (const OptionException &source):Exception(source)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par copie de OptionException"<<endl;
 	#endif
-
-	setMessage(source.message);
-
-
 }
 
 /*******destructeur****************************/
