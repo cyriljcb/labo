@@ -28,7 +28,7 @@ int main()
       case 1 : Essai1(); break;
       case 2 : Essai2(); break;
       case 3 : Essai3(); break;
-      //case 4 : Essai4(); break;
+      case 4 : Essai4(); break;
       default : fini = true ; break;
     }
   }
@@ -147,9 +147,6 @@ void Essai2()
       cout << "Choix : ";
       cin >> ch;
       cin.ignore();
-
-      //cout<<"Test ajout option "<<ch<<" :"<<opts[ch-1]<<endl;
-
       if (ch>=1 && ch<=6) v1.AjouteOption(opts[ch-1]);  // !!!
     } while (ch != 0);
     cout << endl;
@@ -181,7 +178,7 @@ void Essai3()
   // A COMPLETER : Traitez l'exception susceptible d'etre lancee par le bloc de code suivant (try...catch)
   // en particulier : Tester le code de l'erreur et affiche la cause exacte de l'erreur.
 
-  // ...
+  try
   {
     Employe e1("Dupont","Michel",2,"dupomich",Employe::ADMINISTRATIF);
     cout << e1 << endl << endl;
@@ -199,17 +196,21 @@ void Essai3()
     cout << "Affichage du mot de passe :" << endl;
     cout << "Mot de passe = " << e1.getMotDePasse() << endl;  // !!!
   }
-  // ...
+  catch(PasswordException pe)
+  {
+    cout<< "Erreur : "<<pe.getMessage()<<endl<< "Code d'erreur : "<<pe.getCode()<<endl;
+
+  }
   
   cout << endl;
 }
 /**********************************************************************************************/
-/*void Essai4()
+void Essai4()
 {
   cout << "----- 4. Gestion de plusieurs exceptions simultanement ---" << endl;
   // A COMPLETER : Traitez TOUTES les exceptions susceptible d'etre lancee par le bloc de code suivant (try...catch)
 
-  // ...
+  try
   {
     Option o;
     cout << "Encodez une option : " << endl;
@@ -224,8 +225,15 @@ void Essai3()
     cout << "Affichage du mot de passe :" << endl;
     cout << "Mot de passe = " << e1.getMotDePasse() << endl;
   }
-  // ...
+  catch(PasswordException pe)
+  {
+    cout<< "Erreur : "<<pe.getMessage()<<endl<< "Code d'erreur : "<<pe.getCode()<<endl;
+
+  }
+  catch(OptionException e)
+  {
+    cout<< "Erreur : "<<e.getMessage()<<endl;
+  }
   
   cout << endl;
 }
-*/

@@ -16,8 +16,8 @@ Personne::Personne()
 		cout <<"Constructeur par defaut de Personne"<<endl;
 	#endif
 
-	nom = "";
-	prenom = "";
+	nom = "pas de nom enregistré";
+	prenom = "pas de prénom enregistré";
 
 }
 

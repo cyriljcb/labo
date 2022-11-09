@@ -14,25 +14,22 @@ const int PasswordException::NO_PASSWORD = 4;
 /****************************************************************************/
 
 /********constructeur par initialisation*******/
-PasswordException::PasswordException(const string& m,int c)
+PasswordException::PasswordException(const string& m,int c):Exception(m)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par initialisation de PasswordException"<<endl;
 	#endif
-
-	setMessage(m);
 	setCode(c);
 
 }
 
 /********constructeur par copie****************/
-PasswordException::PasswordException (const PasswordException &source)
+PasswordException::PasswordException (const PasswordException &source):Exception(source)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par copie de PasswordException"<<endl;
 	#endif
 
-	setMessage(source.message);
 	setCode(source.code);
 
 

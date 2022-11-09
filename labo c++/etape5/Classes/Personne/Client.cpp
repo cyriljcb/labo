@@ -11,33 +11,26 @@ using namespace std;
 
 /********constructeur par défaut****************/
 
-Client::Client()
+Client::Client():Intervenant()
 {
 		cout <<"Constructeur par defaut de Client"<<endl;
-	gsm = "";
+	gsm = "pas de gsm enregistré";
 
 }
 
 /********constructeur par initialisation*******/
-Client::Client(const string& n,const string &p, int num, const string & g)
+Client::Client(const string& n,const string &p, int num, const string & g):Intervenant(n,p,num)
 {
 	cout <<"Constructeur par initialisation de Client"<<endl;
-	setNom(n);
-	setPrenom(p);
-	setNumero(num);
 	setGsm(g);
 
 }
 
 /********constructeur par copie****************/
-Client::Client (const Client &source)
+Client::Client (const Client &source):Intervenant(source)
 {
 
 	cout <<"Constructeur par copie de Client"<<endl;
-
-	setNom(source.getNom());
-	setPrenom(source.getPrenom());
-	setNumero(source.getNumero());
 	setGsm(source.getGsm());
 	
 

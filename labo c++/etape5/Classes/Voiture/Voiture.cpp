@@ -167,8 +167,18 @@ void Voiture::AjouteOption(const Option & opt)
 	int cpt;
 	unsigned long i=0;
     cpt =0;
+    //printf("ca plante dans AjouteOption");
 	while(i<6&&cpt==0)
 	{
+		if(options[i]!=NULL)
+		{
+				bool isEqual = options[i]->getCode()==opt.getCode();
+		 
+				if(isEqual)
+				{
+					throw OptionException("option déjà présente");
+				}
+		}
 
 		if(options[i]==NULL && i<5)
 		{
@@ -181,18 +191,16 @@ void Voiture::AjouteOption(const Option & opt)
 
 	if(i==6&&options[4]!=NULL)
 		throw OptionException("tableau d'options plein");
-
-		
 	
 }
 
 void Voiture::RetireOption(string code)
 {
-	unsigned long i=0;
+	unsigned long i=0,cpt=0;
 
-	for(i=0;i<5;i++)
+	for(i=0;i<6;i++)
 	{
-		if(options[i]!=NULL && (options[i]->getCode() == code))
+		if(options[i]!=NULL && (options[i]->getCode() == code)&&i<5)
 		{
 			delete options[i];
 			options[i]=NULL;
@@ -200,7 +208,7 @@ void Voiture::RetireOption(string code)
 		}
 
 	}
-	if(options[i]->getCode() != code) 
+	if(i==6&&options[i]->getCode() != code) 
 		throw OptionException("l'option à supprimer n'est pas présente");
 }
 

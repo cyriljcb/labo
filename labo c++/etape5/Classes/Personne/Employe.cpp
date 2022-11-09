@@ -14,7 +14,7 @@ const string Employe::VENDEUR = "Vendeur";
 
 /********constructeur par défaut****************/
 
-Employe::Employe()
+Employe::Employe():Intervenant()
 {
 		cout <<"Constructeur par defaut de Employe"<<endl;
 
@@ -24,28 +24,23 @@ Employe::Employe()
 }
 
 /********constructeur par initialisation*******/
-Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f)
+Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f):Intervenant(n,p,num)
 {
 	cout <<"Constructeur par initialisation de Employe"<<endl;
-
-	setNom(n);
-	setPrenom(p);
-	setNumero(num);
 	setLogin(l);
+	motDePasse = NULL;
 	setFonction(f);
 
 }
 
 /********constructeur par copie****************/
-Employe::Employe (const Employe &source)
+Employe::Employe (const Employe &source):Intervenant(source)
 {
 
 	cout <<"Constructeur par copie de Employe"<<endl;
 
-	setNom(source.getNom());
-	setPrenom(source.getPrenom());
-	setNumero(source.getNumero());
 	setLogin(source.getLogin());
+	motDePasse = NULL;
 	setMotDePasse(source.getMotDePasse());
 	setFonction(source.getFonction());
 	
@@ -57,6 +52,8 @@ Employe::Employe (const Employe &source)
 Employe::~Employe()
 {
 	cout <<"destructeur par copie de Employe"<<endl;
+	if(motDePasse!=NULL)
+		delete motDePasse;
 }
 
 /****************************************************************************/
@@ -74,7 +71,8 @@ string Employe::getLogin()const
 
 string Employe::getMotDePasse()const
 {
-
+	if(motDePasse==NULL)
+		throw PasswordException("le mot de passe est vide",PasswordException::NO_PASSWORD);
 	return *motDePasse;
 
 }
@@ -95,21 +93,30 @@ void Employe::setLogin (const string& l)
 
 void Employe::setMotDePasse(const string m)
 {
+	if(motDePasse!=NULL)
+		delete motDePasse;
+	motDePasse = new string;
+
+	/*int taille=m.length();
+	if(taille ==0)
+		throw PasswordException("le mot de passe est vide",PasswordException::NO_PASSWORD);
+	if(taille <6)
+    	throw PasswordException("le mot de passe ne contient pas au moins 6 caracteres",PasswordException::INVALID_LENGTH);
+*/
+
 	size_t size = m.size() + 1; // + 1 pour le caractère '\0' de fin 
     char * buffer = new char[ size ]; 
     strncpy( buffer, m.c_str(), size ); 
     int i,cptchi = 0, cptlet = 0;
 
-    if(size == 1)
-    	throw PasswordException("le mot de passe est vide",PasswordException::NO_PASSWORD);
     if(size <=6)
     	throw PasswordException("le mot de passe ne contient pas au moins 6 caracteres",PasswordException::INVALID_LENGTH);
-	for(i=0;i<size;i++)
+	for(i=0;i<size-1;i++)
 	{
-		if(buffer[i]<='0'&& buffer[i]>='9')
+		if(buffer[i]>='0'&& buffer[i]<='9')
 			cptchi++;
 
-		if(buffer[i]<='a'&& buffer[i]>='z')
+		if(buffer[i]>='a'&& buffer[i]<='z'||buffer[i]>='A'&& buffer[i]<='Z')
 			cptlet++;
 	}
 	if(cptlet ==0 )
@@ -119,12 +126,11 @@ void Employe::setMotDePasse(const string m)
 		if(cptchi ==0 )
 			throw PasswordException("le mot de passe ne contient pas de chiffre",PasswordException::DIGIT_MISSING);
 		else
-		{
-			motDePasse = new string;
+		{	
 			*motDePasse = m;
-
 		}		
 	}
+
 
 }
 void Employe::setFonction(const string& f)
@@ -139,7 +145,9 @@ void Employe::setFonction(const string& f)
 /****************************************************************************/
 void Employe::ResetMotDePasse()
 {
-	delete motDePasse;
+	if (motDePasse!=NULL)
+		delete motDePasse;
+	motDePasse=NULL;
 }
 
 Employe& Employe::operator=(const Employe& e)
@@ -162,7 +170,7 @@ ostream& operator<< (ostream& s, const Employe& e)
 	s << "le login : "<< e.login << endl;
 	if(e.motDePasse != NULL)
 	{
-		s << "le mot de passe : "<<e.motDePasse<<endl;
+		s << "le mot de passe : "<<e.getMotDePasse()<<endl;
 
 	}
 	s << "fonction : "<<e.fonction<<endl;
