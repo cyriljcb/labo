@@ -15,6 +15,7 @@ extern WindowClient *w;
 
 extern char nomClient[40];
 int idQ; // identifiant de la file de message
+void handlerSIGUSR1(int sig);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +27,6 @@ WindowClient::WindowClient(QWidget *parent):QMainWindow(parent),ui(new Ui::Windo
 
   // Recuperation de l'identifiant de la file de messages
   fprintf(stderr,"(CLIENT %s %d) Recuperation de l'id de la file de messages\n",nomClient,getpid());
-  // TO DO (etape 2)
     if ((idQ = msgget(CLE, 0)) == -1)
     {
       perror("Errur de recuperatoin de la cle");
@@ -34,10 +34,23 @@ WindowClient::WindowClient(QWidget *parent):QMainWindow(parent),ui(new Ui::Windo
     }
 
   // Envoi d'une requete d'identification
-  // TO DO (etape 5)
+   MESSAGE pid;
+
+  pid.type = 1;
+  pid.expediteur = getpid();
+  strcpy(pid.texte, nomClient);
+
+  if (msgsnd(idQ, &pid, sizeof(MESSAGE)-sizeof(long), 0) == -1){
+    perror("Probleme de reception du pid\n");
+    exit(1);
+  }
 
   // Armement du signal SIGUSR1
-  // TO DO (etape 4)
+  struct sigaction sigusr;
+  sigusr.sa_handler = handlerSIGUSR1;
+  sigusr.sa_flags = 0;
+  sigemptyset(&sigusr.sa_mask);
+  sigaction(SIGUSR1,&sigusr,NULL);
 }
 
 WindowClient::~WindowClient()
@@ -96,10 +109,9 @@ const char* WindowClient::getRecu()
 void WindowClient::on_pushButtonEnvoyer_clicked()
 {
   fprintf(stderr,"Clic sur le bouton Envoyer\n");
-  // TO DO (etapes 2, 3, 4)
   
   MESSAGE msg;
-  MESSAGE recv;
+ 
   msg.type = 1;
   strcpy(msg.texte, getAEnvoyer());
   msg.expediteur = getpid();
@@ -109,18 +121,7 @@ void WindowClient::on_pushButtonEnvoyer_clicked()
         perror("Erreur de msgsend");
         exit(1);
     }
-
-
-    if (msgrcv(idQ, &recv, sizeof(MESSAGE)- sizeof(long), getpid(), 0) == -1){
-        perror("Erreur de msgrecv");
-        exit(1);
-    }
-      printf("Processus %d a lu un message\n",getpid());
-  printf("type = %d\n",recv.type);
-  printf("id = %d\n",idQ);
-  printf("type = %d\n",recv.expediteur);
-  puts(msg.texte);
-    setRecu(recv.texte);
+    
 
 
 }
@@ -134,4 +135,15 @@ void WindowClient::on_pushButtonQuitter_clicked()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Handlers de signaux ////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TO DO (etape 4)
+
+void handlerSIGUSR1(int sig)
+{
+  MESSAGE recv;
+  fprintf(stderr,"(Traitement %d) Reception du signal SIGALRM (%d)\n",getpid(),sig);
+    if (msgrcv(idQ, &recv, sizeof(MESSAGE)- sizeof(long), getpid(), 0) == -1)
+    {
+          perror("Erreur de msgrecv");
+          exit(1);
+    }
+  w->setRecu(recv.texte);
+}

@@ -10,6 +10,7 @@
 
 int idQ;
 int pid1,pid2;
+void Handler_SIGINT(int signum);
 
 int main()
 {
@@ -19,26 +20,45 @@ int main()
   char buffer[100];
   
   // Armement du signal SIGINT
-  // TO DO (etape 6)
+   struct sigaction sigint;
+
+  sigint.sa_flags = 0;
+  sigint.sa_handler = Handler_SIGINT;
+  sigemptyset(&sigint.sa_mask);
+  sigaction(SIGINT, &sigint, NULL);
 
   // Creation de la file de message
   fprintf(stderr,"(SERVEUR) Creation de la file de messages\n");
-  // TO DO (etape 2)
   if ((idQ = msgget(CLE, IPC_CREAT | IPC_EXCL | 0600)) == -1)
   {    //si pas = a -1 : création de la file de message
-      perror("Erreur de msgget");
+      perror("(SERVEUR) Erreur de msgget");
       exit(1);
   }
 
   // Attente de connection de 2 clients
   fprintf(stderr,"(SERVEUR) Attente de connection d'un premier client...\n");
-  // TO DO (etape 5)
+   if (msgrcv(idQ, &requete, sizeof(MESSAGE)-sizeof(long), 1, 0) == -1)
+   {
+    perror("Impossible d'obtenir le PID du client 1 !\n");
+    exit(1);
+  }
+  pid1 = requete.expediteur;
+  fprintf(stderr, "Client %s (%d) connecte \n",requete.texte, requete.expediteur);
+  
+
   fprintf(stderr,"(SERVEUR) Attente de connection d'un second client...\n");
-  // TO DO (etape 5)
+  if (msgrcv(idQ, &requete, sizeof(MESSAGE)-sizeof(long), 1, 0) == -1)
+  {
+    perror("Impossible d'obtenir le PID du client 2 !\n");
+    exit(1);
+  }
+  pid2 = requete.expediteur;
+  fprintf(stderr, "Client %s (%d) connecte \n", requete.texte, requete.expediteur);
+  
 
   while(1) 
   {
-    // TO DO (etapes 3, 4 et 5)
+
   	fprintf(stderr,"(SERVEUR) Attente d'une requete...\n");
     if(msgrcv(idQ,&requete,sizeof(MESSAGE)-sizeof(long),1,0)==-1)
     {
@@ -50,23 +70,42 @@ int main()
     strcpy(buffer,srv);
     strcat(buffer,requete.texte);
     strcpy(requete.texte,buffer);
-    /*printf("idQ : %d\n",idQ);
-    printf("type : %d\n",requete.type);
-    printf("expediteur : %d\n",requete.expediteur);*/
-    requete.type = requete.expediteur;
+    destinataire=requete.expediteur;
+    
+    if(destinataire==pid1)
+    {
+      requete.type = pid2;
+    }
+    else
+      requete.type = pid1;
+
+    if(destinataire==pid1)
+    {
+      destinataire = pid2;
+    }
+    else
+      destinataire = pid1;
     
 
-    fprintf(stderr,"(SERVEUR) Envoi de la reponse a %d\n",destinataire);
+     fprintf(stderr,"(SERVEUR) Envoi de la reponse a %d\n",destinataire);
     if(msgsnd(idQ,&requete,sizeof(MESSAGE)-sizeof(long),0)==-1)
     {
       perror("(SERVEUR) Erreur de msgsnd");
       msgctl(idQ,IPC_RMID,NULL);
       exit(1);
     }
+    kill(destinataire,SIGUSR1);
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Handlers de signaux ////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TO DO (etape 6)
+void Handler_SIGINT(int signum)
+{
+  fprintf(stderr, "\nNettoyage de la file\n");
+  if (msgctl(idQ, IPC_RMID, NULL) != 0){
+    perror("Suppression de file impossible !\n");
+  }
+  exit(1);
+}
