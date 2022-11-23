@@ -166,7 +166,7 @@ const char* MainWindowEx4::getGroupe3()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions clics sur les boutons ////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int MainWindowEx4::StartJob(bool isSelected, const char *group)
+/*int MainWindowEx4::StartJob(bool isSelected, const char *group)
 {
   int idFils;
   char buff[50];
@@ -174,10 +174,8 @@ int MainWindowEx4::StartJob(bool isSelected, const char *group)
   {
       if((idFils= fork() ) == 0)
       {
-        //processus fils1
-        sprintf(buff, "%d", 200);
-        
-        if(execlp("Taitement","TraitementFils1",group,buff,NULL) ==-1)
+        //processus fils1        
+        if(execlp("Taitement","Traitement",group,"200",NULL) ==-1)
         {
           perror("erreur de execl()");
           exit(1);
@@ -186,7 +184,7 @@ int MainWindowEx4::StartJob(bool isSelected, const char *group)
       }
   }
   return idFils;
-}
+}*/
 
 void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
 {
@@ -208,23 +206,15 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
     exit(1);
   }
 
-  /*if(sigaction(SIGCHLD,&A,NULL)==-1)
-  {
-      perror("erreur de sigaction");
-      exit(1);
-  }*/
-
-
   /*idFils1 = StartJob(traitement1Selectionne(), getGroupe1());
   idFils2 = StartJob(traitement2Selectionne(), getGroupe2());
-  idFils3 = StartJob(traitement3Selectionne(), getGroupe3());*/
-
+  idFils3 = StartJob(traitement3Selectionne(), getGroupe3());
+*/
   if(traitement1Selectionne() && getGroupe1() != NULL)
   {
     if((idFils1 = fork()) == 0)
     {
-      sprintf(buff, "%d", 200);
-      if(execl("Traitement","TraitementFils1",getGroupe1(),buff,NULL) == -1)
+      if(execl("Traitement","Traitement",getGroupe1(),"200",NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);
@@ -236,7 +226,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
     if((idFils2 = fork()) == 0)
     {
       sprintf(buff, "%d", 450);
-      if(execl("Traitement","TraitementFils2",getGroupe2(),buff,NULL) == -1)
+      if(execl("Traitement","Traitement",getGroupe2(),"450",NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);
@@ -248,7 +238,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
     if((idFils3 = fork()) == 0)
     {
       sprintf(buff, "%d", 700);
-      if(execl("Traitement","TraitementFils3",getGroupe3(),buff,NULL) == -1)
+      if(execl("Traitement","Traitement",getGroupe3(),"700",NULL) == -1)
       {
         perror("erreur de execl()");
         exit(1);

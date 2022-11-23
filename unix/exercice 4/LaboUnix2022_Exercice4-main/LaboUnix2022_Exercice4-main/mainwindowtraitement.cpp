@@ -47,7 +47,8 @@ MainWindowTraitement::MainWindowTraitement(QWidget *parent):QMainWindow(parent),
   // armement de SIGUSR1
   // TO DO
   struct sigaction sigusr;
-  sigusr.sa_handler = 0;
+  sigusr.sa_handler = handlerSIGUSR1;
+  sigusr.sa_flags = 0;
   sigemptyset(&sigusr.sa_mask);
   sigaction(SIGUSR1,&sigusr,NULL);
 
