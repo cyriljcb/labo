@@ -166,7 +166,7 @@ const char* MainWindowEx4::getGroupe3()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions clics sur les boutons ////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*int MainWindowEx4::StartJob(bool isSelected, const char *group)
+int MainWindowEx4::StartJob(bool isSelected, const char *group,const char* resolution)
 {
   int idFils;
   char buff[50];
@@ -175,7 +175,7 @@ const char* MainWindowEx4::getGroupe3()
       if((idFils= fork() ) == 0)
       {
         //processus fils1        
-        if(execlp("Taitement","Traitement",group,"200",NULL) ==-1)
+        if(execlp("Traitement","Traitement",group,resolution,NULL) ==-1)
         {
           perror("erreur de execl()");
           exit(1);
@@ -184,7 +184,7 @@ const char* MainWindowEx4::getGroupe3()
       }
   }
   return idFils;
-}*/
+}
 
 void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
 {
@@ -206,11 +206,11 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
     exit(1);
   }
 
-  /*idFils1 = StartJob(traitement1Selectionne(), getGroupe1());
-  idFils2 = StartJob(traitement2Selectionne(), getGroupe2());
-  idFils3 = StartJob(traitement3Selectionne(), getGroupe3());
-*/
-  if(traitement1Selectionne() && getGroupe1() != NULL)
+  idFils1 = StartJob(traitement1Selectionne(), getGroupe1(),"200");
+  idFils2 = StartJob(traitement2Selectionne(), getGroupe2(),"450");
+  idFils3 = StartJob(traitement3Selectionne(), getGroupe3(),"700");
+
+  /*if(traitement1Selectionne() && getGroupe1() != NULL)
   {
     if((idFils1 = fork()) == 0)
     {
@@ -244,7 +244,7 @@ void MainWindowEx4::on_pushButtonDemarrerTraitements_clicked()
         exit(1);
       }
     }
-  }
+  }*/
 
 
 
