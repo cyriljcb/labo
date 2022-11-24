@@ -11,6 +11,7 @@
 int idQ;
 int pid1,pid2;
 void Handler_SIGINT(int signum);
+int StartJob(int,MESSAGE);
 
 int main()
 {
@@ -37,24 +38,9 @@ int main()
 
   // Attente de connection de 2 clients
   fprintf(stderr,"(SERVEUR) Attente de connection d'un premier client...\n");
-   if (msgrcv(idQ, &requete, sizeof(MESSAGE)-sizeof(long), 1, 0) == -1)
-   {
-    perror("Impossible d'obtenir le PID du client 1 !\n");
-    exit(1);
-  }
-  pid1 = requete.expediteur;
-  fprintf(stderr, "Client %s (%d) connecte \n",requete.texte, requete.expediteur);
-  
-
-  fprintf(stderr,"(SERVEUR) Attente de connection d'un second client...\n");
-  if (msgrcv(idQ, &requete, sizeof(MESSAGE)-sizeof(long), 1, 0) == -1)
-  {
-    perror("Impossible d'obtenir le PID du client 2 !\n");
-    exit(1);
-  }
-  pid2 = requete.expediteur;
-  fprintf(stderr, "Client %s (%d) connecte \n", requete.texte, requete.expediteur);
-  
+  pid1 = StartJob(idQ,requete);
+  fprintf(stderr,"(SERVEUR) Attente de connection d'un deuxieme client...\n");
+  pid2 = StartJob(idQ,requete);
 
   while(1) 
   {
@@ -108,4 +94,21 @@ void Handler_SIGINT(int signum)
     perror("Suppression de file impossible !\n");
   }
   exit(1);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Handlers de signaux ////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int StartJob(int idQ, MESSAGE requete)
+{
+  
+   if (msgrcv(idQ, &requete, sizeof(MESSAGE)-sizeof(long), 1, 0) == -1)
+   {
+    perror("Impossible d'obtenir le PID du client 1 !\n");
+    exit(1);
+  }
+  fprintf(stderr, "Client %s (%d) connecte \n",requete.texte, requete.expediteur);
+  return requete.expediteur;
+  
 }
