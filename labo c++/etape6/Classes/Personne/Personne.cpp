@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <cstring>
 using namespace std;
 
 /****************************************************************************/
@@ -128,4 +129,46 @@ istream& operator>> (istream& s,Personne& p)
 	
 
 	return s;
+}
+int Personne::operator<(const Personne& p1)const
+{
+	int ind;
+	if ((ind = strcmp(getNom().c_str(),p1.getNom().c_str()))==0)
+	{
+		return strcmp(getNom().c_str(),p1.getNom().c_str());
+	}
+	else
+		return ind;
+}
+int Personne::operator>(const Personne& p1)const
+{
+	int a;
+	if (strcmp(getNom().c_str(),p1.getNom().c_str())==1)
+	{
+		a = 1;
+	}
+	else
+	{
+		if (strcmp(getNom().c_str(),p1.getNom().c_str())==-1)
+		{
+			a = -1;
+		}
+		else
+		{
+			if(strcmp(getPrenom().c_str(),p1.getPrenom().c_str())==1)
+			{
+				a =1;
+			}
+			else
+			{
+				if((strcmp(getPrenom().c_str(),p1.getPrenom().c_str())==-1))
+				{
+					a = -1;
+				}
+				else
+					a = 0;
+			}
+		}
+	}
+	return a;
 }

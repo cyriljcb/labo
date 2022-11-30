@@ -140,11 +140,10 @@ Vecteur<T> Vecteur<T>::operator=(const Vecteur<T> &vec)
 		delete []v;
 	v=new T [_sizeMax];
 	 //memset(v,*(vec.v),_sizeMax*sizeof(T));
-	for(i=0;i<_sizeMax;i++)
+	for(i=0;i<_size;i++)
 	{
 		v[i]=(vec.v[i]);
 		
-
 	}
 	 return (*this);
 }

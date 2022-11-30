@@ -8,6 +8,7 @@ CLASSESP=Classes/Personne/
 CLASSESE=Classes/Exception/
 CLASSESVE=Classes/Vecteur/
 CLASSESIT= Classes/Iterateur/
+CLASSESVET=Classes/VecteurTrie/
 
 OBJSM=Classes/Modele/Modele.o
 OBJSV=Classes/Voiture/Voiture.o
@@ -21,16 +22,18 @@ OBJSEOE=Classes/Exception/OptionException.o
 OBJSEPE=Classes/Exception/PasswordException.o
 OBJSVE= Classes/Vecteur/Vecteur.o
 OBJSIT= Classes/Iterateur/Iterateur.o
+OBJSVET= Classes/VecteurTrie/VecteurTrie.o
 
 EXEC= $(OBJSEX) $(OBJSEOE) $(OBJSEPE)
+VEC= $(OBJSVE) $(OBJSIT) $(OBJSVET)
 
-CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP) -I $(CLASSESE) -I$(CLASSESVE) -I$(CLASSESIT)   #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
+CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP) -I $(CLASSESE) -I$(CLASSESVE) -I$(CLASSESIT) -I$(CLASSESVET)  #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
-Test6:		Test6.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o $(CLASSESP)Personne.o $(CLASSESP)Intervenant.o $(CLASSESP)Client.o $(CLASSESP)Employe.o $(EXEC) $(OBJSVE) $(OBJSIT)
+Test6:		Test6.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o $(CLASSESP)Personne.o $(CLASSESP)Intervenant.o $(CLASSESP)Client.o $(CLASSESP)Employe.o $(EXEC) $(VEC)
 	# g++ Test1.cpp $(CLASSE)Modele.o -I Classes/ -o Test1
 	echo "Creation de Test6"
-	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(OBJSP) $(OBJSI) $(OBJSC) $(OBJSE) $(EXEC) $(OBJSVE) $(OBJSIT) Test6.cpp -o Test6
+	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(OBJSP) $(OBJSI) $(OBJSC) $(OBJSE) $(EXEC) $(VEC) Test6.cpp -o Test6
 	
 
 $(CLASSESM)Modele.o:	$(CLASSESM)Modele.cpp
@@ -82,7 +85,11 @@ $(CLASSESVE)Vecteur.o:	$(CLASSESVE)Vecteur.cpp
 $(OBJSIT):	$(CLASSESIT)Iterateur.cpp
 	echo "Creation d'iterateur.o"
 	$(CO) $(CLASSESIT)Iterateur.cpp -c -o $(OBJSIT)
+
+$(OBJSVET):	$(CLASSESVET)VecteurTrie.cpp
+	echo "Creation de vecteurTrie.o"
+	$(CO) $(CLASSESVET)VecteurTrie.cpp -c -o $(OBJSVET)
 	
 
 clean:
-	rm $(CLASSESM)*.o $(CLASSESV)*.o $(CLASSESO)*.o $(CLASSESP)*.o $(CLASSESE)*.o $(CLASSESVE)*.o $(CLASSESIT)*.o
+	rm $(CLASSESM)*.o $(CLASSESV)*.o $(CLASSESO)*.o $(CLASSESP)*.o $(CLASSESE)*.o $(CLASSESVE)*.o $(CLASSESIT)*.o $(CLASSESVET)*.o

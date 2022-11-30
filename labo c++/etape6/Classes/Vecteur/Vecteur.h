@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 using namespace std;
+template<class T> class Iterateur;
 template<class T> class Vecteur
 {
 	protected: 
@@ -27,6 +28,7 @@ template<class T> class Vecteur
 		void Affiche()const;
 		T operator[](int);
 		Vecteur<T> operator=(const Vecteur<T>&);
+		friend class Iterateur<T>;
 		
 };
 #endif

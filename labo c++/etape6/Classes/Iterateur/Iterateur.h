@@ -1,10 +1,7 @@
 #ifndef ITERATEUR_H
 #define ITERATEUR_H
-#include "Vecteur.h"
-//#include <string>
-//#include <iostream>
 using namespace std;
-
+#include "Vecteur.h"
 template <class T>
 class Iterateur
 {

@@ -26,6 +26,8 @@ class Personne
 		void setPrenom(const string &);
 
 		Personne& operator=(const Personne&);
+		int operator<(const Personne&)const;
+		int operator>(const Personne&)const;
 
 		void Affiche()const;
 
