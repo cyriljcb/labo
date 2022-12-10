@@ -6,10 +6,10 @@ template <class T>
 class Iterateur
 {
 private: 
-	Vecteur<T>& p; //pointeur vers l'objet containeur
+	const Vecteur<T>& p; //pointeur vers l'objet containeur
 	T *pData;
 public:
-	Iterateur(Vecteur<T>&);
+	Iterateur(const Vecteur<T>&);
 	bool end() const;
 	void reset();
 	bool operator++();

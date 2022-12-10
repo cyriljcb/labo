@@ -16,13 +16,13 @@ template<class T> class Vecteur
 
 		Vecteur();
 		Vecteur(int);
-		Vecteur(const Vecteur&);
+		Vecteur(const Vecteur&); //faut peut etre mettre const Vecteur<T> &
 		~Vecteur();
 
-		int size();
-		int sizeMax();
-		T* getVec();
-		void insere(T);
+		int size()const;
+		int sizeMax()const;
+		T* getVec()const;
+		void insere(const T);
 		T retire(int);
 
 		void Affiche()const;

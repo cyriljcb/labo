@@ -7,7 +7,7 @@
 using namespace std;
 
 template<class T>
-Iterateur<T>::Iterateur(Vecteur<T>& vec) : p(vec),pData(vec.getVec()) 
+Iterateur<T>::Iterateur(const Vecteur<T>& vec) : p(vec),pData(vec.getVec()) 
 {
 
 }

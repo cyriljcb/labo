@@ -70,18 +70,18 @@ template<class T> Vecteur<T>::~Vecteur()
 /****************************************************************************/
 
 template<class T>
-int  Vecteur<T>:: size()
+int  Vecteur<T>:: size()const
 {
 	return _size;
 }
 
 template<class T>
-int  Vecteur<T>::sizeMax()
+int  Vecteur<T>::sizeMax()const
 {
 	return _sizeMax;
 }
 template<class T>
-T*  Vecteur<T>::getVec()
+T*  Vecteur<T>::getVec()const
 {
 	return v;
 }
@@ -94,7 +94,7 @@ void Vecteur<T>::Affiche() const
 }
 
 template<class T>
-void Vecteur<T>::insere(T val)
+void Vecteur<T>::insere(const T val)
 {
 	int ind = size();
 	v[ind]=val;
@@ -138,8 +138,8 @@ Vecteur<T> Vecteur<T>::operator=(const Vecteur<T> &vec)
 	_size = vec._size;
 	if(v!=NULL)
 		delete []v;
+	
 	v=new T [_sizeMax];
-	 //memset(v,*(vec.v),_sizeMax*sizeof(T));
 	for(i=0;i<_size;i++)
 	{
 		v[i]=(vec.v[i]);
