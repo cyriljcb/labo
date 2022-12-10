@@ -7,7 +7,15 @@ using namespace std;
 /****************************************************************************/
 /***** Constructeurs et destructeurs ****************************************/
 /****************************************************************************/
+/********constructeur par défaut****************/
 
+OptionException::OptionException():Exception()
+{
+	
+		cout <<"Constructeur par defaut de OptionException"<<endl;
+	
+
+}
 /********constructeur par initialisation*******/
 OptionException::OptionException(const string& m):Exception(m)
 {

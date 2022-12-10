@@ -20,7 +20,7 @@ OBJSEPE=Classes/Exception/PasswordException.o
 
 EXEC= $(OBJSEX) $(OBJSEOE) $(OBJSEPE)
 
-CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP) -I $(CLASSESE)   #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
+CO=g++ -D DEBUG -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP) -I $(CLASSESE)   #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
 Test5:		Test5.cpp $(CLASSESM)Modele.o $(CLASSESV)Voiture.o $(CLASSESO)Option.o $(CLASSESP)Personne.o $(CLASSESP)Intervenant.o $(CLASSESP)Client.o $(CLASSESP)Employe.o $(EXEC)

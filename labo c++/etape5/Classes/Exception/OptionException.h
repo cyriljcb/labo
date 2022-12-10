@@ -8,7 +8,7 @@ using namespace std;
 class OptionException: public Exception
 {
 public:
-		
+		OptionException();
 		OptionException(const string &);
 		OptionException(const OptionException &);
 		~OptionException();

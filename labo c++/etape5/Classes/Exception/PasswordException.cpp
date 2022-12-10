@@ -12,7 +12,16 @@ const int PasswordException::NO_PASSWORD = 4;
 /****************************************************************************/
 /***** Constructeurs et destructeurs ****************************************/
 /****************************************************************************/
+/********constructeur par défaut****************/
 
+PasswordException::PasswordException():Exception()
+{
+	
+		cout <<"Constructeur par defaut de PasswordException"<<endl;
+
+	
+
+}
 /********constructeur par initialisation*******/
 PasswordException::PasswordException(const string& m,int c):Exception(m)
 {

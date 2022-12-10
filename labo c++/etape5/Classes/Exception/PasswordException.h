@@ -11,7 +11,8 @@ private:
 		int code;
 
 public:
-		
+
+		PasswordException();	
 		PasswordException(const string &,int);
 		PasswordException(const PasswordException &);
 		~PasswordException();

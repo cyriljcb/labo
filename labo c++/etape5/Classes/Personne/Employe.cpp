@@ -130,6 +130,7 @@ void Employe::setMotDePasse(const string m)
 			*motDePasse = m;
 		}		
 	}
+	delete buffer;
 
 
 }

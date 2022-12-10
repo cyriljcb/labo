@@ -167,7 +167,6 @@ void Voiture::AjouteOption(const Option & opt)
 	int cpt;
 	unsigned long i=0;
     cpt =0;
-    //printf("ca plante dans AjouteOption");
 	while(i<6&&cpt==0)
 	{
 		if(options[i]!=NULL)
@@ -198,17 +197,17 @@ void Voiture::RetireOption(string code)
 {
 	unsigned long i=0,cpt=0;
 
-	for(i=0;i<6;i++)
+	for(i=0;i<5;i++)
 	{
-		if(options[i]!=NULL && (options[i]->getCode() == code)&&i<5)
+		if(options[i]!=NULL && (options[i]->getCode() == code))
 		{
 			delete options[i];
 			options[i]=NULL;
-			
+			i=10;
 		}
 
 	}
-	if(i==6&&options[i]->getCode() != code) 
+	if(i<10) 
 		throw OptionException("l'option à supprimer n'est pas présente");
 }
 

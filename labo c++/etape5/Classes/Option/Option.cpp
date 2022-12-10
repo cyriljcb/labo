@@ -103,20 +103,14 @@ float Option::getPrix()const
 
 void Option::setCode (const string & c)
 {
-	size_t size = c.size() + 1; // + 1 pour le caractère '\0' de fin 
-    char * buffer = new char[ size ]; 
-    strncpy( buffer, c.c_str(), size ); 
-	if(strlen(buffer)!=4)
+	if(c.size()!=4)
 		throw OptionException("le format du code n'est pas correct ");
 	code = c;
 }
 
 void Option::setIntitule(const string & i)
 {
-	size_t size = i.size() + 1; // + 1 pour le caractère '\0' de fin 
-    char * buffer = new char[ size ]; 
-    strncpy( buffer, i.c_str(), size ); 
-	if(strlen(buffer)==0)
+	if(i.size()<=0)
 		throw OptionException("l'intitule ne peut pas etre vide");
 	intitule = i;
 }
