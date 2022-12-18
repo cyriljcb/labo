@@ -13,15 +13,19 @@ using namespace std;
 
 Client::Client():Intervenant()
 {
+	#ifdef DEBUG
 		cout <<"Constructeur par defaut de Client"<<endl;
+	#endif
 	gsm = "pas de gsm enregistré";
 
 }
 
 /********constructeur par initialisation*******/
-Client::Client(const string& n,const string &p, int num, const string & g):Intervenant(n,p,num)
+Client::Client(string n,string p, int num,string g):Intervenant(n,p,num)
 {
+	#ifdef DEBUG
 	cout <<"Constructeur par initialisation de Client"<<endl;
+	#endif
 	setGsm(g);
 
 }
@@ -29,8 +33,9 @@ Client::Client(const string& n,const string &p, int num, const string & g):Inter
 /********constructeur par copie****************/
 Client::Client (const Client &source):Intervenant(source)
 {
-
+	#ifdef DEBUG
 	cout <<"Constructeur par copie de Client"<<endl;
+	#endif
 	setGsm(source.getGsm());
 	
 
@@ -40,7 +45,9 @@ Client::Client (const Client &source):Intervenant(source)
 
 Client::~Client()
 {
+	#ifdef DEBUG
 	cout <<"destructeur par copie de Client"<<endl;
+	#endif
 }
 
 /****************************************************************************/
@@ -60,7 +67,7 @@ string Client::getGsm()const
 /*********SETTERS***********************/
 
 
-void Client::setGsm (const string g)
+void Client::setGsm (string g)
 {
 	gsm = g;
 }
@@ -71,9 +78,7 @@ void Client::setGsm (const string g)
 
 Client& Client::operator=(const Client& c)
 {
-	setNom(c.getNom());
-	setPrenom(c.getPrenom());
-	setNumero(c.getNumero());
+	Intervenant::operator=(c);
 	setGsm(c.getGsm());
 	return (*this);
 }

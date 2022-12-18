@@ -49,9 +49,12 @@ Option Garage::getOption(int indice)
 void Garage::ajouteClient(string nom,string prenom,string gsm)
 {
 	Client c;
-	c.setNom(nom);
-	c.setPrenom(prenom);
-	c.setGsm(gsm);
+	 c.setNom(nom);
+	 c.setPrenom(prenom);
+	 c.setGsm(gsm);
+	 c.setNumero(c.numCourant);
+	 c.numCourant++;
+
 	clients.insere(c);
 }
 void Garage::afficheClients() const
@@ -64,30 +67,61 @@ void Garage::supprimeClientParIndice(int ind)
 }
 void Garage::supprimeClientParNumero(int num)
 {
-
+	int i=0;
+	while(i<clients.size() && clients[i].getNumero()!=num)
+	{
+		i++;
+	}
+	if(i<clients.size())
+		clients.retire(i);
 }
 
 void Garage::ajouteEmploye(string nom,string prenom,string login,string fonction)
 {
 	Employe e;
-	e.setNom(&nom);
-	e.setPrenom(&prenom);
-	cout<< "employe : "<<e<<endl;
-	e.setLogin(&login);
-	e.setFonction(&fonction);
-	cout<< "employe : "<<e<<endl;
+	e.setNom(nom);
+	e.setPrenom(prenom);
+	e.setNumero(e.numCourant);
+	e.setLogin(login);
+	e.setFonction(fonction);
+	e.numCourant++;
 	employes.insere(e);
 
 }
 void Garage::afficheEmployes() const
 {
-
+	employes.Affiche();
 }
 void Garage::supprimeEmployeParIndice(int ind)
 {
-
+	employes.retire(ind);
 }
 void Garage::supprimeEmployeParNumero(int num)
 {
-
+	int i=0;
+	while(i<employes.size() && employes[i].getNumero()!=num)
+	{
+		i++;
+	}
+	if(i<employes.size())
+		employes.retire(i);
 }
+
+Garage& Garage::getInstance()
+{
+	return Instance;
+}
+
+Garage Garage::Instance = Garage();
+
+Voiture& Garage::getProjetEnCours()
+{
+	return projetEnCours;
+}
+
+void Garage::resetProjetEnCours()
+{
+	getProjetEnCours() = Voiture();
+}
+
+Voiture Garage::projetEnCours = Voiture();

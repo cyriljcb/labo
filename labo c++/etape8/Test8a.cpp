@@ -29,12 +29,12 @@ int main()
   g.ajouteClient("Vilvens","Claude","0477/45.29.98");
   g.ajouteClient("Charlet","Christophe","0475/71.31.89");
 
+
   // Ajout d'employes
-  cout<<"plantage employé"<<endl;
-  g.ajouteEmploye("Issier","Paul","issipaul",Employe::VENDEUR);
-  //g.ajouteEmploye("Coptere","Elie","coptelie",Employe::ADMINISTRATIF);
-  //g.ajouteEmploye("Duviver","Isabelle","duviisab",Employe::ADMINISTRATIF);
-  //g.ajouteEmploye("Cadabras","Habras","cadahabr",Employe::VENDEUR);
+     g.ajouteEmploye("Issier","Paul","issipaul",Employe::VENDEUR);
+     g.ajouteEmploye("Coptere","Elie","coptelie",Employe::ADMINISTRATIF);
+  g.ajouteEmploye("Duviver","Isabelle","duviisab",Employe::ADMINISTRATIF);
+  g.ajouteEmploye("Cadabras","Habras","cadahabr",Employe::VENDEUR);
   
   // Affichage
   cout << "////////// Avant ///////////////////////////////////////////////////////////////////////" << endl;
@@ -42,22 +42,22 @@ int main()
   g.afficheEmployes();
 
   // Suppression par indice
-  /*g.supprimeClientParIndice(1);
-  g.supprimeEmployeParIndice(1);*/
+  g.supprimeClientParIndice(1);
+  g.supprimeEmployeParIndice(1);
   
   // Affichage
   cout << "////////// Apres suppression par indice (1) ////////////////////////////////////////////" << endl;
-  /*g.afficheClients();
-  g.afficheEmployes();*/
+  g.afficheClients();
+  g.afficheEmployes();
 
-  // Suppression par numero
-  /*g.supprimeClientParNumero(4);
-  g.supprimeEmployeParNumero(9);*/
+  //Suppression par numero
+  g.supprimeClientParNumero(4);
+  g.supprimeEmployeParNumero(9);
 
   // Affichage
   cout << "////////// Apres suppression par id (C4 et V9) /////////////////////////////////////////" << endl;
-/*  g.afficheClients();
-  g.afficheEmployes();*/
+  g.afficheClients();
+ g.afficheEmployes();
 
   return 0;
 }

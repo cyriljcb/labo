@@ -97,6 +97,7 @@ void Vecteur<T>::Affiche() const
 template<class T>
 void Vecteur<T>::insere(const T val)
 {
+	
 	int ind = size();
 	v[ind]=val;
 	_size++;
@@ -118,6 +119,7 @@ T Vecteur<T>::retire(int ind)
 	
 	return test;
 }
+
 
 
 

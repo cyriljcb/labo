@@ -23,7 +23,7 @@ Personne::Personne()
 }
 
 /********constructeur par initialisation*******/
-Personne::Personne(const string& n ,const string& p)
+Personne::Personne(string n ,string p)
 {
 	#ifdef DEBUG
 		cout <<"Constructeur par initialisation de Personne"<<endl;
@@ -40,7 +40,6 @@ Personne::Personne (const Personne &source)
 	#ifdef DEBUG
 		cout <<"Constructeur par copie de Personne"<<endl;
 	#endif
-
 	setNom(source.getNom());
 	setPrenom(source.getPrenom());
 
@@ -78,12 +77,12 @@ string Personne::getPrenom()const
 /*********SETTERS***********************/
 
 
-void Personne::setNom (const string & n)
+void Personne::setNom (string n)
 {
 	nom = n;
 }
 
-void Personne::setPrenom(const string & p)
+void Personne::setPrenom(string p)
 {
 	prenom = p;
 }
@@ -130,7 +129,7 @@ istream& operator>> (istream& s,Personne& p)
 
 	return s;
 }
-int Personne::operator<(const Personne& p1)const
+/*int Personne::operator<(const Personne& p1)const
 {
 	int ind;
 	if ((ind = strcmp(getNom().c_str(),p1.getNom().c_str()))==0)
@@ -171,4 +170,4 @@ int Personne::operator>(const Personne& p1)const
 		}
 	}
 	return a;
-}
+}*/

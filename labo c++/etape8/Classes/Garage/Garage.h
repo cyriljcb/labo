@@ -22,9 +22,14 @@ private:
 	Vecteur<Client> clients;
 	Vecteur<Modele> modeles;
 	Vecteur<Option> options;
-
-public:
+	static Garage Instance;
+	
 	Garage();
+	Garage(const Garage &);
+	Garage& operator=(const Garage&);
+
+	static Voiture projetEnCours;
+public:
 
 	void ajouteModele(const Modele & m);
 	void afficheModelesDisponibles() const;
@@ -43,5 +48,10 @@ public:
 	void afficheEmployes() const;
 	void supprimeEmployeParIndice(int ind);
 	void supprimeEmployeParNumero(int num);
+
+	static Garage& getInstance();
+
+	static Voiture& getProjetEnCours();
+	static void resetProjetEnCours();
 };
 #endif

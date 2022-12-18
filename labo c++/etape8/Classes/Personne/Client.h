@@ -14,12 +14,12 @@ class Client: public Intervenant
 	public: 
 
 		Client();
-		Client(const string &, const string&, int ,const string &);
+		Client(string,string, int ,string);
 		Client(const Client&);
 		~Client();
 
 		string getGsm()const;
-		void setGsm(const string);
+		void setGsm(string);
 
 		Client& operator= (const Client&);
 		string ToString()const;

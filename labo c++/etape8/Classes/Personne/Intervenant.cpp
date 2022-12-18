@@ -3,11 +3,10 @@
 #include <cstdlib>
 #include <string>
 using namespace std;
-
 /****************************************************************************/
 /***** Constructeurs et destructeurs ****************************************/
 /****************************************************************************/
-
+int Intervenant::numCourant = 1;
 /********constructeur par défaut****************/
 
 Intervenant::Intervenant():Personne()
@@ -37,10 +36,7 @@ Intervenant::Intervenant (const Intervenant &source):Personne(source)
 	#ifdef DEBUG
 		cout <<"Constructeur par copie de Intervenant"<<endl;
 	#endif
-
 	setNumero(source.getNumero());
-	
-
 }
 
 /*******destructeur****************************/
@@ -84,6 +80,7 @@ void Intervenant::setNumero (int n)
 
 Intervenant& Intervenant::operator=(const Intervenant& i1)
 {
+	Personne::operator=(i1);
 	setNumero(i1.getNumero());
 	return (*this);
 }

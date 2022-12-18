@@ -276,7 +276,7 @@ void Modele::Load(ifstream & fichierIn)
 	
 	if(nom != NULL) // ou  if(nom)
 		delete [] nom;
-	nom = new char[t+1];
+	nom = new char[t];
 	
 	/*for(i=0;i<t;i++)
 	{

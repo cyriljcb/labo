@@ -2,6 +2,9 @@
 #define EMPLOYE_H
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <sstream>
+#include <string.h>
 #include "Intervenant.h"
 using namespace std;
 
@@ -20,7 +23,7 @@ class Employe: public Intervenant
 		const static string VENDEUR;
 		const static string ADMINISTRATIF;
 		Employe();
-		Employe(const string &, const string &,int, const string &,const string &);
+		Employe(string,string,int,string,string);
 		Employe(const Employe &);
 		~Employe();
 

@@ -1,10 +1,5 @@
 #include "Employe.h"
 #include "PasswordException.h"
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <sstream>
-#include <string.h>
 using namespace std;
 const string Employe::ADMINISTRATIF = "Administratif";
 const string Employe::VENDEUR = "Vendeur";
@@ -16,17 +11,21 @@ const string Employe::VENDEUR = "Vendeur";
 
 Employe::Employe():Intervenant()
 {
+	#ifdef DEBUG
 		cout <<"Constructeur par defaut de Employe"<<endl;
-
+	#endif
 	login = "";
 	fonction = "";
+	motDePasse=NULL;
 
 }
 
 /********constructeur par initialisation*******/
-Employe::Employe(const string &n, const string &p, int num, const string & l,const string & f):Intervenant(n,p,num)
+Employe::Employe(string n,string p, int num, string l,string f):Intervenant(n,p,num)
 {
-	cout <<"Constructeur par initialisation de Employe"<<endl;
+	#ifdef DEBUG
+		cout <<"Constructeur par initialisation de Employe"<<endl;
+	#endif
 	setLogin(l);
 	motDePasse = NULL;
 	setFonction(f);
@@ -36,24 +35,34 @@ Employe::Employe(const string &n, const string &p, int num, const string & l,con
 /********constructeur par copie****************/
 Employe::Employe (const Employe &source):Intervenant(source)
 {
-
-	cout <<"Constructeur par copie de Employe"<<endl;
-
+	#ifdef DEBUG
+		cout <<"Constructeur par copie de Employe"<<endl;
+	#endif
 	setLogin(source.getLogin());
-	motDePasse = NULL;
-	setMotDePasse(source.getMotDePasse());
+	if(source.motDePasse==NULL)
+	{
+		motDePasse = NULL;
+	}
+	else
+	{
+		setMotDePasse(source.getMotDePasse());
+	}
+	
 	setFonction(source.getFonction());
 	
 
 }
 
+
 /*******destructeur****************************/
 
 Employe::~Employe()
 {
-	cout <<"destructeur par copie de Employe"<<endl;
 	if(motDePasse!=NULL)
+	{
 		delete motDePasse;
+	}
+	motDePasse = NULL;
 }
 
 /****************************************************************************/
@@ -86,12 +95,12 @@ string Employe::getFonction()const
 /*********SETTERS***********************/
 
 
-void Employe::setLogin ( string l)
+void Employe::setLogin (string l)
 {
 	login = l;
 }
 
-void Employe::setMotDePasse( string m)
+void Employe::setMotDePasse(string m)
 {
 	if(motDePasse!=NULL)
 		delete motDePasse;
@@ -107,6 +116,7 @@ void Employe::setMotDePasse( string m)
 	size_t size = m.size() + 1; // + 1 pour le caractère '\0' de fin 
     char * buffer = new char[ size ]; 
     strncpy( buffer, m.c_str(), size ); 
+    buffer[size]=0;
     int i,cptchi = 0, cptlet = 0;
 
     if(size <=6)
@@ -132,9 +142,11 @@ void Employe::setMotDePasse( string m)
 	}
 	delete buffer;
 
+    
+
 
 }
-void Employe::setFonction(const string& f)
+void Employe::setFonction(string f)
 {
 	fonction = f;
 }
@@ -153,11 +165,18 @@ void Employe::ResetMotDePasse()
 
 Employe& Employe::operator=(const Employe& e)
 {
-	setNom(e.getNom());
-	setPrenom(e.getPrenom());
-	setNumero(e.getNumero());
+	Intervenant::operator=(e);
 	setLogin(e.getLogin());
-	setMotDePasse(e.getMotDePasse());
+	if(e.motDePasse!=NULL)
+	{
+		setMotDePasse(e.getMotDePasse());
+	}
+	else
+	{
+		ResetMotDePasse();
+	}
+
+	
 	setFonction(e.getFonction());
 	return (*this);
 }
@@ -173,6 +192,10 @@ ostream& operator<< (ostream& s, const Employe& e)
 	{
 		s << "le mot de passe : "<<e.getMotDePasse()<<endl;
 
+	}
+	else
+	{
+		s<<"pas de mdp"<<endl;
 	}
 	s << "fonction : "<<e.fonction<<endl;
 	return s;

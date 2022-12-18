@@ -15,19 +15,19 @@ class Personne
 
 	public :
 		Personne();
-		Personne(const string&,const string&);
+		Personne(string, string);
 		Personne(const Personne&);
 		~Personne();
 
 		string getNom()const;
 		string getPrenom()const;
 
-		void setNom(const string &);
-		void setPrenom(const string &);
+		void setNom(string);
+		void setPrenom(string);
 
 		Personne& operator=(const Personne&);
-		int operator<(const Personne&)const;
-		int operator>(const Personne&)const;
+		//int operator<(const Personne&)const;
+		//int operator>(const Personne&)const;
 
 		void Affiche()const;
 

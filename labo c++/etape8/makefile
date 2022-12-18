@@ -29,8 +29,7 @@ EXEC= $(OBJSEX) $(OBJSEOE) $(OBJSEPE)
 OBJSVE= Classes/Vecteur/Vecteur.o
 OBJSIT= Classes/Iterateur/Iterateur.o
 OBJSVET= Classes/VecteurTrie/VecteurTrie.o
-VEC= $(OBJSVE) $(OBJSIT) $(OBJSVET)
-
+VEC= $(OBJSVE) $(OBJSIT) 
 OBJSG = Classes/Garage/Garage.o
 
 
@@ -39,10 +38,10 @@ OBJSG = Classes/Garage/Garage.o
 CO=g++ -I $(CLASSESM) -I $(CLASSESV) -I $(CLASSESO) -I $(CLASSESP) -I $(CLASSESE) -I$(CLASSESVE) -I$(CLASSESIT) -I$(CLASSESVET) -I$(CLASSESG)  #quettier dit qu'on ne peut pas mettre le -d-D DEBUG à la fin
 
 
-Test8a:		Test8a.cpp $(OBJSM) $(OBJSV) $(OBJSO) $(PERS) $(EXEC) $(VEC) $(OBJSG)
+Test8b:		Test8b.cpp $(OBJSM) $(OBJSV) $(OBJSO) $(PERS) $(EXEC) $(VEC) $(OBJSG)
 	# g++ Test1.cpp $(CLASSE)Modele.o -I Classes/ -o Test1
-	echo "Creation de Test8a"
-	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(PERS) $(EXEC) $(VEC) $(OBJSG) Test8a.cpp -o Test8a
+	echo "Creation de Test8b"
+	$(CO) $(OBJSM) $(OBJSV) $(OBJSO) $(PERS) $(EXEC) $(VEC) $(OBJSG) Test8b.cpp -o Test8b
 	
 
 $(OBJSM):	$(CLASSESM)Modele.cpp

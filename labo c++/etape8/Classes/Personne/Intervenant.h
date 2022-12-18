@@ -24,6 +24,7 @@ class Intervenant: public Personne
 
 		Intervenant& operator=(const Intervenant&);
 
+		static int numCourant;
 
 };
 #endif
