@@ -68,7 +68,7 @@ void Garage::supprimeClientParIndice(int ind)
 void Garage::supprimeClientParNumero(int num)
 {
 	int i=0;
-	while(i<clients.size() && clients[i].getNumero()!=num)
+	while(i<employes.size() && clients[i].getNumero()!=num)		//pas juste car faut utiliser l'itérateur
 	{
 		i++;
 	}
@@ -98,7 +98,7 @@ void Garage::supprimeEmployeParIndice(int ind)
 }
 void Garage::supprimeEmployeParNumero(int num)
 {
-	int i=0;
+	int i;
 	while(i<employes.size() && employes[i].getNumero()!=num)
 	{
 		i++;
