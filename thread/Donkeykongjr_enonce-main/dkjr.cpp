@@ -108,30 +108,22 @@ int main(int argc, char* argv[])
 
 	pthread_create(&threadCle,NULL,FctThreadCle,NULL);		
 	pthread_create(&threadEvenements,NULL,FctThreadEvenements,NULL);
-	pthread_create(&threadDKJr,NULL,FctThreadDKJr,NULL);		
+	pthread_create(&threadDKJr,NULL,FctThreadDKJr,NULL);
+	pthread_create(&threadDK,NULL,FctThreadDK,NULL);
 
-	
-	while(1)
+	pthread_cond_init(&condDK, NULL);
+	pthread_cond_init(&condScore, NULL);
+
+
+	for(int i = 1;i<4;i++)
 	{
-
-	};
-	// afficherCroco(11, 2);
-	// afficherCroco(17, 1);
-	// afficherCroco(0, 3);
-	// afficherCroco(12, 5);
-	// afficherCroco(18, 4);
-
-	// afficherDKJr(11, 9, 1);
-	// afficherDKJr(6, 19, 7);
-	// afficherDKJr(0, 0, 9);
+		
+		pthread_join(threadDKJr,NULL);
+		afficherEchec(i);	
+		pthread_create(&threadDKJr,NULL,FctThreadDKJr,NULL);
+	}
+	pause();
 	
-	// afficherCorbeau(10, 2);
-	// afficherCorbeau(16, 1);
-	
-	// effacerCarres(9, 10, 2, 1);
-
-	// afficherEchec(1);
-	// afficherScore(1999);
 
 	
 }
@@ -256,14 +248,14 @@ void * FctThreadDKJr(void *p)
 	sigprocmask(SIG_UNBLOCK, &mask, NULL);
 
 	struct timespec temps = { 1, 400000000 };
-	
+	struct timespec cinqcentms = {0,500000000};
 	pthread_mutex_lock(&mutexGrilleJeu);
 	setGrilleJeu(3, 1, DKJR);
 	afficherDKJr(11, 9, 1);
 	etatDKJr = LIBRE_BAS;
 	positionDKJr = 1;
 	pthread_mutex_unlock(&mutexGrilleJeu);
-
+	effacerCarres(11, 7, 2,2);
 	while (1)
 	{
 		pause();
@@ -273,8 +265,6 @@ void * FctThreadDKJr(void *p)
 		switch (etatDKJr)
 		{
 		case LIBRE_BAS:
-			printf("\nentrez dans libre_bas\n");
-			printf("\nevenement :%d \n",evenement);
 			switch (evenement)
 			{
 			case SDLK_LEFT:
@@ -317,7 +307,7 @@ void * FctThreadDKJr(void *p)
 					setGrilleJeu(2,positionDKJr);
 					effacerCarres(11,(positionDKJr * 2) + 7, 2, 2);
 					setGrilleJeu(2, positionDKJr, DKJR);
-					afficherDKJr(10, (positionDKJr * 2) + 7,7);
+					afficherDKJr(10, (positionDKJr * 2) + 7,5);
 				}
 				else
 				{
@@ -334,7 +324,6 @@ void * FctThreadDKJr(void *p)
 
 				break;
 			}
-			printf("sort du switch evenement\n");
 			break;
 		case LIANE_BAS:
 				switch (evenement)
@@ -371,8 +360,6 @@ void * FctThreadDKJr(void *p)
 				break;
 				
 		case LIBRE_HAUT:
-				printf("entre dans le libre_haut\n");
-				
 				switch (evenement)
 				{
 				case SDLK_LEFT:
@@ -385,15 +372,36 @@ void * FctThreadDKJr(void *p)
 					}
 					else
 					{
-						if(grilleJeu[0][1].type == CLE)
-						{
+						effacerCarres(7, (positionDKJr * 2) + 7, 2, 2);
+						positionDKJr--;
+						afficherDKJr(7,(positionDKJr * 2) + 7,9);
+						nanosleep(&cinqcentms,NULL);
+
+							
+							effacerCarres(5, (positionDKJr * 2) + 7, 3, 3);
+							if(grilleJeu[0][1].type == CLE)
+							{
+								afficherDKJr(5,(positionDKJr * 2) + 7,11);
+								nanosleep(&cinqcentms,NULL);
+								effacerCarres(6,((positionDKJr-1) * 2)+7, 2, 4);
+							}
+							else
+							{
+								afficherDKJr(9,(positionDKJr * 2) + 7,12);
+								nanosleep(&cinqcentms,NULL);
+								effacerCarres(6,((positionDKJr-1) * 2)+7, 2, 4);
+							}
 							positionDKJr = 1;
 							etatDKJr = LIBRE_BAS;
-						}
+							afficherDKJr(12,(positionDKJr * 2) + 7,13);
+							pthread_mutex_unlock(&mutexEvenement);
+							nanosleep(&cinqcentms,NULL);
+							pthread_mutex_unlock(&mutexGrilleJeu);
+							pthread_exit(0);
+	
 					}
 					break;
 				case SDLK_RIGHT:
-					printf("\nentre dans le right haut\n");
 					if(positionDKJr < 7)
 					{
 						setGrilleJeu(1,positionDKJr);
@@ -402,7 +410,6 @@ void * FctThreadDKJr(void *p)
 						setGrilleJeu(1, positionDKJr, DKJR);
 						if(positionDKJr==7)
 						{
-							printf("la position de dkjr : %d",positionDKJr);
 							afficherDKJr(7, (positionDKJr * 2) + 7,6);
 						}
 						else
