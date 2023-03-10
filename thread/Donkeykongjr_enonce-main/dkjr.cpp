@@ -640,7 +640,7 @@ void* FctThreadEnnemis(void* p)
 		switch(nombre)
 		{
 			case 0: 
-				//pthread_create(&threadCroco,NULL,&FctThreadCroco,NULL);
+				pthread_create(&threadCroco,NULL,&FctThreadCroco,NULL);
 				break;
 			case 1:
 				pthread_create(&threadCorbeau,NULL,&FctThreadCorbeau,NULL);
@@ -652,14 +652,19 @@ void* FctThreadEnnemis(void* p)
 
 void* FctThreadCroco(void * p)
 {
+
+	S_CROCO croco,*pt;
 	struct timespec septcentms = {0,700000000};
-	int * pt,val;
-	pt = (int*)malloc(sizeof(int));
+	int val;
 	
+	pt = (S_CROCO*)malloc(sizeof(S_CROCO));
+		croco.haut = true;
 		for(int i = 2;i<8;i++)
 		{
-			val = (i*2)+7;
-			*pt =i;
+			croco.position = i;
+
+			val = (croco.position*2)+7;  //useless peut le faire avec i
+			*pt =croco;
 			pthread_setspecific(keySpec,(void*)pt);
 			pthread_mutex_lock(&mutexGrilleJeu);
 			setGrilleJeu(1,i,CROCO,pthread_self());
@@ -669,11 +674,37 @@ void* FctThreadCroco(void * p)
 			else
 				afficherCroco(val,1);
 			nanosleep(&septcentms,NULL);
+			setGrilleJeu(1,i);
 			if(i%2==0)
 				effacerCarres(8,val,1,1);
 			else
 				effacerCarres(8,val,1,1);
 			
+		}
+		afficherCroco(8,3);
+		nanosleep(&septcentms,NULL);
+		effacerCarres(9,23,1,1);
+		croco.haut = false;
+		for(int i = 7;i>0;i--)
+		{
+			croco.position = i;
+
+			val = (croco.position*2)+7;  //useless peut le faire avec i
+			*pt =croco;
+			pthread_setspecific(keySpec,(void*)pt);
+			pthread_mutex_lock(&mutexGrilleJeu);
+			setGrilleJeu(1,i,CROCO,pthread_self());
+			pthread_mutex_unlock(&mutexGrilleJeu);
+			if(i%2==0)
+				afficherCroco(val,5);
+			else
+				afficherCroco(val,4);
+			nanosleep(&septcentms,NULL);
+			setGrilleJeu(1,i);
+			if(i%2==0)
+				effacerCarres(12,val,1,1);
+			else
+				effacerCarres(12,val,1,1);
 		}
 
 	
@@ -689,16 +720,17 @@ void* FctThreadCorbeau(void* p)
 		{
 			afficherGrilleJeu();
 			val = (i*2)+8;
-			if(grilleJeu[2][val].type==DKJR)
+			pthread_mutex_lock(&mutexGrilleJeu);
+			if(grilleJeu[2][i].type==DKJR)
 			{
 				setGrilleJeu(2,i);
 				pthread_kill(threadDKJr,SIGINT);
+				pthread_mutex_unlock(&mutexGrilleJeu);
 				pthread_exit(0);
 			}
+			
 			else
 			{
-				
-				pthread_mutex_lock(&mutexGrilleJeu);
 				setGrilleJeu(2,i,CORBEAU,pthread_self());
 				pthread_mutex_unlock(&mutexGrilleJeu);
 				*pt =i;
