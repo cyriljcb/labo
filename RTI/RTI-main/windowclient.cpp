@@ -531,7 +531,7 @@ void WindowClient::on_pushButtonPrecedent_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonAcheter_clicked()
 {
-    char m[200],IP[20],Quantite[20],article[10],opt[20];
+    char m[500],IP[20],Quantite[20],article[10],opt[20];
   int nbEcrits;
   sprintf(m,"ACHAT");
   strcat(m,s);
@@ -558,37 +558,49 @@ void WindowClient::on_pushButtonAcheter_clicked()
         tok=strtok(m,s);
          strcpy(opt, tok);
          printf("opt : %s\n",opt);
+
          if (strcmp(opt,"CADDIE") == 0)
         {
-          char id[3],intitule[20],prix[10],stock[10];
-          int  sto;
-          float pri;
+          
           tok=strtok(NULL,s);
-          strcpy(id, tok);
-          if(strcmp(id,"-1")==0)
-          {
-            tok=strtok(NULL,s);
-            strcpy(intitule,tok);
-            w->dialogueMessage("Achat",intitule);
-          }
-          else
-          { 
-            w->dialogueMessage("Achat", "Vous avez achete avec succes ");
-             NumArticle = atoi(id);
-   
-             tok=strtok(NULL,s);
-             strcpy(intitule, tok);
-             tok=strtok(NULL,s);
-             strcpy(prix, tok);
-             pri=atof(prix);
-             tok=strtok(NULL,s);
-             strcpy(stock, tok);
-             sto=atoi(stock);
+          int nbr = atoi(tok);
+          printf("nbr : %d",nbr);
+                    
+              w->dialogueMessage("Achat", "Vous avez achete avec succes ");
+              w->videTablePanier();
+              totalCaddie=0.0;
+              char id[3],intitule[20],prix[10],stock[10];
+              int  sto;
+              float pri;
+              tok=strtok(NULL,s);
+              for(int i=0;i<nbr;i++)
+              {
+                
+                tok=strtok(NULL,s);
+                strcpy(id, tok);
+                NumArticle = atoi(id);
+                tok=strtok(NULL,s);
+                strcpy(intitule, tok);
+                tok=strtok(NULL,s);
+                   strcpy(prix, tok);
+                   pri=atof(prix);
+                   tok=strtok(NULL,s);
+                   strcpy(stock, tok);
+                   sto=atoi(stock);
 
-              w->ajouteArticleTablePanier(intitule,pri,sto);
-              totalCaddie+=sto*pri;
-              w->setTotal(totalCaddie);
-          }
+                    w->ajouteArticleTablePanier(intitule,pri,sto);
+                    totalCaddie+=sto*pri;
+                    w->setTotal(totalCaddie);
+              }
+        }
+        else
+        {
+
+              tok=strtok(NULL,s);
+              tok=strtok(NULL,s);
+              w->dialogueMessage("Achat",tok);
+            
+
         }
 }
 
@@ -620,26 +632,25 @@ void WindowClient::on_pushButtonSupprimer_clicked()
             perror("Erreur de Receive");
             //close(sClient);
         }
-        sprintf(cpy,m);
+        strcpy(cpy,m);
         printf("la chaine dans supp : %s\n",m);
           tok=strtok(m,s);
          strcpy(opt, tok);
-         if (strcmp(opt, "CANCEL") == 0)
+         if (strcmp(opt, "CADDIE") == 0)
         {
           
-          tok=strtok(NULL,s);
-          printf("le token = %s\n",tok);
-          if(strcmp(tok,"-1")==0)
-          {
-            w->dialogueErreur("Suppression","suppression impossible");
-          }
-          else
-          {
+          //tok=strtok(NULL,s);
+          
+          
            w->dialogueMessage("Suppression","suppression reussie");
            //tok=strtok(NULL,s);
 
            mettreAJourArticle(cpy); 
-          }
+          
+        }
+        else
+        {
+          w->dialogueErreur("Suppression","suppression impossible");
         }
 
     }
@@ -672,57 +683,52 @@ void mettreAJourArticle(char* c)
     nbrStr[0] = c[0];
     nbrStr[1] = c[1];
     nbrStr[2] = '\0';*/
-  char id[3],intitule[50],inti[50],prix[30],pr[30],stock[30],st[30];
+  char nobr[3],id[3],intitule[50],inti[50],prix[30],pr[30],stock[30],st[30];
           int  sto;
           float pri;
   printf("rentre dans le majarticle : %s\n",c);
   totalCaddie=0.0;
+
   tok=strtok(c,s);
-  tok=strtok(NULL,dollar);
-  int nbr = recupererNbrArticle(tok);
+  
+  tok=strtok(NULL,s);
+  sprintf(nobr,tok);
+  printf("tok = %s\n",tok);
+ 
+  int nbr = atoi(nobr);
+  printf("nbr = %d\n\n\n",nbr);
   w->videTablePanier();
-  tok = strtok(NULL, s);
+  totalCaddie=0.0;
+  
     for (int i = 0; i < nbr; i++) {
-    tok = strtok(NULL, s);
-    tok = strtok(NULL, s);
+    tok = strtok(NULL, s);//pour la place dans panier
+    tok = strtok(NULL, s);//id
+    tok = strtok(NULL, s); //pour l'intitule
 
-    if (tok != NULL) {
-        char* colon = strchr(tok, ':');
-        if (colon != NULL) {
-            char* value = colon + 1; // Pointe vers les caractères après ':'
-            printf("value %s\n", value);
-            sprintf(inti, value); // Copie les caractères après ':' dans inti
-        }
+    if(tok!=NULL)
+    {
+      sprintf(inti,tok);
+    }
+    tok = strtok(NULL, s);
+    if(tok!=NULL)
+    {
+      sprintf(prix,tok);
+      pri=atof(prix);
     }
 
-    tok = strtok(NULL, s);
-
-    if (tok != NULL) {
-        char* colon = strchr(tok, ':');
-        if (colon != NULL) {
-            char* value = colon + 1;
-            printf("%s\n", value);
-            strcpy(prix, value);
-            pri = atof(prix);
-        }
-    }
-
-    tok = strtok(NULL, s);
-
-    if (tok != NULL) {
-        char* colon = strchr(tok, ':');
-        if (colon != NULL) {
-            char* value = colon + 1;
-            printf("%s\n", value);
-            strcpy(stock, value);
-            sto = atoi(stock);
-        }
+    tok = strtok(NULL, dollar);
+    if(tok!=NULL)
+    {
+      sprintf(stock,tok);
+      sto=atoi(stock);
     }
 
     printf("apres\n");
     totalCaddie += sto * pri;
     printf("inti : %s & prix = %f & stock = %d\n",inti,pri,sto);
     w->ajouteArticleTablePanier(inti, pri, sto);
+    
+
 }
 
 }

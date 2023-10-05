@@ -14,6 +14,7 @@ typedef struct
   char  image[20];
 } ARTICLE;
 
+
 ARTICLE Elm[] = 
 {
   {-1,"carottes",2.16f,20,"carottes.jpg"},

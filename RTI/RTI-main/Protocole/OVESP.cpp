@@ -234,10 +234,6 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 		{
 			char id[20],sid[20],quant[20],squant[50],sprix[50],sintitule[50],c[200],communication[200];
 			int idInt,quantite;
-			strcpy(sid,"id:");
-			strcpy(squant,"quant:");
-			strcpy(sprix,"prix:");
-			strcpy(sintitule,"intitule:");
 			tok=strtok(NULL,s);
 			strcpy(id,tok);
 			printf("%s\n\n",id);
@@ -258,8 +254,7 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 	            printf("Erreur de mysql_store_result: %s\n",mysql_error(connexion));
 	            exit(1);
 	          }
-	          sprintf(reponse,"ACHAT");
-			  strcat(reponse,s);
+	          
 	         if((Tuple = mysql_fetch_row(resultat)) != NULL)
 	         {
 	         	if(quantite<=atoi(Tuple[3]))
@@ -274,26 +269,14 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 	                }
 	                char prix[20];
 	         			printf("avant creation trame\n");
-					  strcat(reponse,Tuple[0]); //id
-					  strcat(reponse,s);
-					  strcat(reponse,Tuple[1]); //intitule
-					  strcat(reponse,s);
-					  strcpy(prix,remplacerpoint(Tuple[2]));
-					  strcat(reponse,prix); //prix
-					  strcat(reponse,s);
-					  strcat(reponse,quant); //stock
-					  strcat(reponse,s);
-					  strcat(sid,Tuple[0]);
-					  strcat(squant,quant);
-					  strcat(sintitule,Tuple[1]);
-					  strcat(sprix,prix);
-					  sprintf(c,sid);
+					  
+					  sprintf(c,Tuple[0]);
 					  strcat(c,s);
-					  strcat(c,sintitule);
+					  strcat(c,Tuple[1]);
 					  strcat(c,s);
-					  strcat(c,sprix);
+					  strcat(c,remplacerpoint(Tuple[2]));
 					  strcat(c,s);
-					  strcat(c,squant);
+					  strcat(c,quant);
 					  printf("c = %s\n",c);
 					  ajouterArticle(lArticle,c);
 					  FctCaddie(requete,reponse,lArticle);
@@ -301,6 +284,8 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 	         	}
 	         	else
 	         	{
+	         		sprintf(reponse,"ACHAT");
+			  			strcat(reponse,s);
 	         		strcat(reponse,"-1");
 	         		strcat(reponse,s);
 	         		strcat(reponse,"Pas assez de stock");
@@ -308,14 +293,18 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 	         	}
 	         	 
 	    }
-	    else
-	    {
-	    	strcat(reponse,"-1");
-	    	strcat(reponse,s);
-	    	strcat(reponse,"Panier plein");
-	    	strcat(reponse,s);	
-	    }
-	}
+
+    }
+    else
+    {
+    	sprintf(reponse,"ACHAT");
+		  strcat(reponse,s);
+    	strcat(reponse,"-1");
+    	strcat(reponse,s);
+    	strcat(reponse,"Panier plein");
+    	strcat(reponse,s);	
+    }
+	
 
 }
 
@@ -331,28 +320,36 @@ void FctCancel(char* requete,char* reponse,char* lArticle)
 		printf("lArticle dans FCTCANCEL : %s\n",lArticle);
 		int a= suppArticle(lArticle,tok);
 		printf("sortie du supp\n\n");
-		sprintf(reponse,"CANCEL");
-		strcat(reponse,s);
+		
 		if(a==1)
 		{
-			strcat(reponse,lArticle);
-			
-                           
+			FctCaddie(requete,reponse,lArticle);             
 		}
 		else
-			strcat(reponse,"-1");
-		strcat(reponse,s);
-		strcat(reponse,"\0");
-		printf("reponse : %s\n",reponse);
-	
+		{
+			sprintf(reponse,"CANCEL");
+			strcat(reponse,s);
+				strcat(reponse,"-1");
+			strcat(reponse,s);
+			strcat(reponse,"\0");
+			printf("reponse : %s\n",reponse);
+		}
 }
 void FctCaddie(char* requete, char* reponse,char* lArticle)
 {
 	printf("rentre dans caddie\n");
 	sprintf(reponse,"CADDIE");
 	strcat(reponse,s);
-	char tmp[500];
-	strcpy(tmp,lArticle+5);
+	char tmp[500],nbr[3];
+	strncpy(nbr,lArticle,2);
+	if(nbr[0]=='0')
+	{
+		nbr[0]=nbr[1];
+		nbr[1]='\0';
+	}
+	strcat(reponse,nbr);
+	strcat(reponse,s);
+	strcpy(tmp,lArticle+2);
 	strcat(reponse,tmp);
 	strcat(reponse,s);
 	strcat(reponse,"\0");
@@ -452,25 +449,31 @@ int suppArticle(char* lArticle,char* ind)
     	printf("le token %d: %s\n",i,tok);
     	i++;
     	strcpy(cpy,tok);
-    	id[0]=cpy[5];
+    	id[0]=cpy[2];
     	place[0]=cpy[0];
+    	place[1]='\0';
+    	char t[2];
 
-	    char* ptr = strstr(cpy,"quant:");
+    	t[0]=cpy[strlen(cpy)-2];
+			t[1]='\0';
+    	if(strcmp(t,"/")==0)
+			{
+				quantite[0]=cpy[strlen(cpy)-1];
+				quantite[1]='\0';
+			}
+			else
+			{
+				quantite[0]=cpy[strlen(cpy)-2];
+    	quantite[1]=cpy[strlen(cpy)-1];
+    	quantite[2]='\0';
+			}
+	   	
 	    
-	    if (ptr != NULL) 
-	    {
-	        // Si "quant:" est trouvé, avance le pointeur
-	        ptr += strlen("quant:");
-	        
-	        int i = 0;
-	        
-	        while (*ptr != '\0' && *ptr != '/') {
-	            quantite[i++] = *ptr;
-	            ptr++;
-	        }
 	        printf("quantite : %s\n",quantite);
-	    }
+	    
 	    	printf("contenu de id :%s & contenu de place :%s\n",id,place);
+
+	    	printf("ind : %s\n",ind);
         if(strcmp(ind,place)==0)
         {
         	printf("la chaine :%s\n",tok);
