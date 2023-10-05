@@ -689,6 +689,7 @@ void mettreAJourArticle(char* c)
   printf("rentre dans le majarticle : %s\n",c);
   totalCaddie=0.0;
 
+
   tok=strtok(c,s);
   
   tok=strtok(NULL,s);
