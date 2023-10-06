@@ -19,6 +19,7 @@
 int clients[NB_MAX_CLIENTS];
 int nbclients = 0;
 MYSQL* connexion;
+
 const char s[4]="/";
 const char dollar[2]="$";
 char* tok;
@@ -28,18 +29,22 @@ void suppAllArticle(char* lArticle);
 void ajouterArticle(char* lArticle,char* c);
 void Connexion_OVESP();
 void FctLogin(char* requete, char* reponse, int socket);
+void FctLogout(char* requete, char* reponse, int socket);
 void FctConsult(char* requete,char * reponse);
 void FctAchat(char* requete,char * reponse,char* lArticle);
 void FctCancel(char* requete,char * reponse,char* lArticle);
 void FctCancelAll(char* requete,char * reponse,char* lArticle);
+void FctConfirmer(char* requete,char * reponse,char* lArticle);
 void FctCaddie(char* requete, char* reponse,char* lArticle,bool cancelAll);
 void requeteDB(int ind, char* req1);
 int recupererNbrArticle(char* lArticle);
 char* remplacerpoint(char *str);
+int estPresent(int socket);
+void ajoute(int socket);
+void retire(int socket);
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_mutex_t mutexAccesBD = PTHREAD_MUTEX_INITIALIZER;
-
 
 
 void Connexion_OVESP()
@@ -70,6 +75,7 @@ void AccesBD_OVESP(char* requete, char * reponse,int socket,char * lArticle)
 		printf("login\n");
 		pthread_mutex_lock(&mutexAccesBD);
 		FctLogin(requete,reponse,socket);
+		
 		pthread_mutex_unlock(&mutexAccesBD);
 	}
 	else
@@ -106,6 +112,24 @@ void AccesBD_OVESP(char* requete, char * reponse,int socket,char * lArticle)
 						FctCancelAll(requete,reponse,lArticle);
 						pthread_mutex_unlock(&mutexAccesBD);
 					}
+					else
+					{
+						if(strcmp(opt,"CONFIRMER")==0)
+						{
+							pthread_mutex_lock(&mutexAccesBD);
+							FctConfirmer(requete,reponse,lArticle);
+							pthread_mutex_unlock(&mutexAccesBD);
+						}
+						else
+						{
+							if(strcmp(opt,"LOGOUT")==0)
+							{
+								pthread_mutex_lock(&mutexAccesBD);
+								FctLogout(requete,reponse,socket);
+								pthread_mutex_unlock(&mutexAccesBD);
+							}
+						}
+					}
 				}
 			}
 		}	
@@ -121,7 +145,7 @@ void FctLogin(char* requete,char * reponse,int socket) //attention, on va écrir
 	MYSQL_RES  *resultat;
   	MYSQL_ROW  Tuple;
 	printf("passage dans le case LOGIN de AccesBD\n");
-		char nom[20],mdp[20],message[50],communication[200],sta[5],requeteSQL[200];
+		char nom[20],mdp[20],message[50],communication[200],sta[5],requeteSQL[200],id[3];
 		int nouveau = -1,status;
 		tok=strtok(NULL,s);	   
 		strcpy(nom,tok);
@@ -188,6 +212,18 @@ void FctLogin(char* requete,char * reponse,int socket) //attention, on va écrir
           	}
           	
           }
+           sprintf(requeteSQL, "SELECT id FROM clients WHERE login='%s'", nom);
+            if (mysql_query(connexion, requeteSQL) != 0) {
+                printf("Erreur de mysql_query: %s\n", mysql_error(connexion));
+                exit(1);
+            }
+            if ((resultat = mysql_store_result(connexion)) == NULL) {
+                printf("Erreur de mysql_store_result: %s\n", mysql_error(connexion));
+                exit(1);
+            }
+            if ((Tuple = mysql_fetch_row(resultat)) != NULL) {
+                strcpy(id,Tuple[0]);
+            }
           sprintf(communication,"LOGIN");
 		  strcat(communication,s);
 		  sprintf(sta,"%d",status);
@@ -195,13 +231,22 @@ void FctLogin(char* requete,char * reponse,int socket) //attention, on va écrir
 		  strcat(communication,s);
 		  strcat(communication,message);
 		   strcat(communication,s);
+		   strcat(communication,id);
+		   strcat(communication,s);
 		   strcat(communication,"\0");
 		  strcpy(reponse,communication);
-		  if(status==1)
+		  if(status==1&&!estPresent(socket))
 		  {
+
 		  	ajoute(socket);
-		  }
-	
+		  }	
+}
+void FctLogout(char* requete,char * reponse,int socket)
+{
+	if(estPresent(socket)==1)
+		{
+			retire(socket);
+		}
 }
 void FctConsult(char* requete,char * reponse)
 {
@@ -380,9 +425,12 @@ void FctCaddie(char* requete, char* reponse,char* lArticle,bool cancelAll)
 		}
 		strcat(reponse,nbr);
 		strcat(reponse,s);
-		strcpy(tmp,lArticle+2);
-		strcat(reponse,tmp);
-		strcat(reponse,s);
+		if(strlen(lArticle)>5)
+		{
+			strcpy(tmp,lArticle+2);
+			strcat(reponse,tmp);
+			strcat(reponse,s);
+		}
 	}
 	strcat(reponse,"\0");
 }
@@ -391,6 +439,53 @@ void FctCancelAll(char* requete, char* reponse,char* lArticle)
 	printf("rentre dans FctCancelAll\n");
 	suppAllArticle(lArticle);
 	FctCaddie(requete,reponse,lArticle,true);
+}
+void FctConfirmer(char* requete,char* reponse, char* lArticle)
+{
+	printf("passe dans confirmer\n");
+	printf("la chaine : %s\n",requete);
+	MYSQL_RES  *resultat;
+  MYSQL_ROW  Tuple;
+  char requeteSQL[500];
+  tok = strtok(NULL,s);
+  int idclient = atoi(tok);
+  tok = strtok(NULL,s);
+  char Cmontant[6]; 
+  sprintf(Cmontant,remplacerpoint(tok));
+  printf("Cmontant : %s\n",Cmontant);
+ 	float montant = atof(Cmontant);
+ 	printf("montant : %f\n",montant);
+ int paye = 0; // 0 pour faux (non payé)
+ sprintf(reponse,"CONFIRMER");
+ strcat(reponse,s);
+sprintf(requeteSQL, "INSERT INTO factures (idClient, date, montant, paye) VALUES ('%d', NOW(), '%f', '%d');", idclient, montant, paye);
+ 	printf( "INSERT INTO factures (idClient, date, montant, paye) VALUES ('%d', NOW(), '%f', '%d');", idclient, montant, paye);
+    if (mysql_query(connexion,requeteSQL) != 0)
+  {
+    printf("Erreur de mysql_query: %s\n",mysql_error(connexion));
+    exit(1);
+  }
+  // Récupérez l'ID de la facture créée
+    sprintf(requeteSQL, "SELECT LAST_INSERT_ID() AS id;");
+    if (mysql_query(connexion, requeteSQL) != 0) {
+        printf("Erreur de mysql_query: %s\n", mysql_error(connexion));
+        exit(1);
+    }
+    if ((resultat = mysql_store_result(connexion)) == NULL) {
+        printf("Erreur de mysql_store_result: %s\n", mysql_error(connexion));
+        exit(1);
+    }
+    if ((Tuple = mysql_fetch_row(resultat)) != NULL) {
+    		strcat(reponse,Tuple[0]);    
+    } 
+    else {
+        printf("Erreur lors de la récupération de l'ID de la facture\n");
+        strcat(reponse,"erreur");
+    }
+    strcat(reponse,s);
+    strcat(reponse,"\0");
+    //suppAllArticle(lArticle);
+
 }
 int estPresent(int socket)
 {
@@ -421,8 +516,16 @@ void retire(int socket)
 char* remplacerpoint(char *str) {
     int len = strlen(str);
     for (int i = 0; i < len; i++) {
-        if (str[i] == '.') {
+        if (str[i] == '.') 
+        {
             str[i] = ',';
+        }
+        else
+        {
+        	if(str[i]==',')
+        	{
+        		str[i]='.';
+        	}
         }
     }
     return str;

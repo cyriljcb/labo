@@ -13,7 +13,6 @@
 #include "TCP.h"
 #include "Protocole/OVESP.h"
 
-#define NB_THREADS_POOL 2
 #define TAILLE_FILE_ATTENTE 20
 pthread_mutex_t mutexSocketsAcceptees;
 pthread_cond_t condSocketsAcceptees;
@@ -55,7 +54,21 @@ if ((sEcoute = ServerSocket(atoi(argv[1]))) == -1)
 perror("Erreur de ServeurSocket");
 exit(1);
 }
+int NB_THREADS_POOL = -1;
+FILE *fichier = fopen("config.txt", "r");
+    if (fichier == NULL) {
+        perror("Impossible d'ouvrir le fichier de configuration");
+        exit(1);
+    }
 
+    char ligne[100];
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) 
+     {
+        if (sscanf(ligne, "NB_THREADS_POOL = %d", &NB_THREADS_POOL) == 1)
+        {
+          break;
+        } 
+    }
 // Creation du pool de threads
 printf("Création du pool de threads.\n");
 pthread_t th;
@@ -81,10 +94,7 @@ if (sigaction(SIGINT,&A,NULL) == -1)
 			close(sEcoute);
 			exit(1);
 		}
-		if(estPresent(sService)==-1)
-		{
-			ajoute(sService);
-		}
+		
 		printf("Connexion acceptée : IP=%s socket=%d\n",ipClient,sService);
 		// Insertion en liste d'attente et réveil d'un thread du pool
 		// (Production d'une tâche)
@@ -157,7 +167,7 @@ void traitement(int sService)
         {
         	test = false;
         }
-        
+
 	}
 }
 

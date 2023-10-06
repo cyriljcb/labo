@@ -8,7 +8,7 @@ using namespace std;
 
 extern WindowClient *w;
 
-#define IPSERVEUR    "0.0.0.0"
+
 #define NUMARTICLEMAX 21
 #define REPERTOIRE_IMAGES "images/"
 int sClient=-1;
@@ -16,6 +16,8 @@ bool logged;
 void HandlerSIGINT(int s);
 void mettreAJourArticle(char* c);
 int recupererNbrArticle(char* c);
+
+char idClient[3];
 int NumArticle=0;
 float totalCaddie = 0.0;
 const char s[2]="/";
@@ -52,9 +54,39 @@ WindowClient::WindowClient(QWidget *parent) : QMainWindow(parent), ui(new Ui::Wi
     perror("Erreur de sigaction");
     exit(1);
   }
+   FILE *fichier = fopen("config.txt", "r");
+    if (fichier == NULL) {
+        perror("Impossible d'ouvrir le fichier de configuration");
+        exit(1);
+    }
 
+    char ligne[100];
+    int port_achat = -1; 
+    char IPSERVEUR[15];
+     while (fgets(ligne, sizeof(ligne), fichier) != NULL) 
+     {
+        if (sscanf(ligne, "PORT_ACHAT = %d", &port_achat) == 1)
+        {
+          
+        } 
+      else if (sscanf(ligne, "IPSERVEUR = %s", IPSERVEUR) == 1) 
+      {
+      }
+    }
+
+
+    // Fermez le fichier de configuration
+    fclose(fichier);
+
+    // Vérifiez si le port a été lu avec succès
+    if (port_achat != -1) {
+        printf("Numéro de port d'achat lu depuis le fichier de configuration : %d\n", port_achat);
+    } else {
+        printf("Impossible de lire le numéro de port d'achat depuis le fichier de configuration.\n");
+    }
+    printf("Adresse IP du serveur lue depuis le fichier de configuration : %s\n", IPSERVEUR);
     // Connexion sur le serveur
-  if ((sClient = ClientSocket(IPSERVEUR,50000)) == -1)
+  if ((sClient = ClientSocket(IPSERVEUR,port_achat)) == -1)
   {
     perror("Erreur de ClientSocket");
     exit(1);
@@ -304,7 +336,7 @@ void WindowClient::closeEvent(QCloseEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonLogin_clicked()
 {
-  char message[80],IP[20],port[10],reponse[80],opt[20];
+  char message[80],reponse[80],opt[20];
   
  
   sprintf(message,"LOGIN");
@@ -350,7 +382,9 @@ void WindowClient::on_pushButtonLogin_clicked()
         dialogueMessage("connexion",tok);
         puts(tok);
         w->loginOK();
-        logged = true;  
+        logged = true;
+        tok=strtok(NULL,s);
+        strcpy(idClient,tok);
         sprintf(message,"CONSULT");
         strcat(message,s);
         strcat(message,"1");
@@ -406,26 +440,41 @@ void WindowClient::on_pushButtonLogin_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonLogout_clicked()
 {
-  char m[50],IP[20];
-  int nbEcrits;
+  char m[500],opt[20],cpy[500];
   if(totalCaddie>0)
   {
     sprintf(m,"CANCEL_ALL");
     strcat(m,s);
-    sprintf(IP,IPSERVEUR);
-    strcat(m,IP);
-    strcat(m,s);
-    strcat(m,IP);
-    strcat(m,s);
-     if ((nbEcrits = Send(sClient,m,strlen(m))) == -1)
+     if ( Send(sClient,m,strlen(m)) == -1)
       {
         perror("Erreur de Send");
         exit(1);
-      }   
+      } 
+      m[0]='\0';
+       if (Receive(sClient, m) < 0)
+        {
+            perror("Erreur de Receive");
+        }
+        strcpy(cpy,m);
+        printf("la chaine dans supp : %s\n",m);
+          tok=strtok(m,s);
+         strcpy(opt, tok);
+         if (strcmp(opt, "CADDIE") == 0)
+        {      
+           w->dialogueMessage("Suppression","suppression reussie");
+           //tok=strtok(NULL,s);
+
+           mettreAJourArticle(cpy); 
+          
+        }
+        else
+        {
+          w->dialogueErreur("Suppression","suppression impossible");
+        }  
   }
   sprintf(m,"LOGOUT");
    strcat(m,s);
-     if ((nbEcrits = Send(sClient,m,strlen(m))) == -1)
+     if (Send(sClient,m,strlen(m)) == -1)
     {
       perror("Erreur de Send");
       exit(1);
@@ -690,7 +739,75 @@ void WindowClient::on_pushButtonViderPanier_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonPayer_clicked()
 {
+  if(totalCaddie==0.0)
+  {
+    w->dialogueErreur("paiement","panier vide");
+  }
+  else
+  {
+    char m[500],cpy[500],var[10];
+    printf("PASSE PAR PAYER\n");
+    sprintf(m,"CONFIRMER");
+   strcat(m,s);
+    strcat(m,idClient);
+    strcat(m,s); 
+   sprintf(var,"%f",totalCaddie);
+   strcat(m,var);
+   strcat(m,s);
+    if ((Send(sClient,m,strlen(m))) == -1)
+      {
+        perror("Erreur de Send");
+        exit(1);
+      }
+      m[0]='\0';
+       if (Receive(sClient, m) < 0)
+        {
+            perror("Erreur de Receive");
+        }
+        printf("la chaine dans payer : %s\n",m);
+        strcpy(cpy,m);
+          tok=strtok(m,s);
+         if (strcmp(tok, "CONFIRMER") == 0)
+        {      
+          char a[30]="numero de la facture = ";
+          tok=strtok(NULL,s);
+          strcat(a,tok);
+           w->dialogueMessage("Facture",a);          
+        }
+    //dans les consignes, il est mit que nous devons remettre les articles dans la BD
+    // j'interprete donc cela comme un cancel_all
+      sprintf(m,"CANCEL_ALL");
+      strcat(m,s);
+      strcat(m,"\0");
+       if ((Send(sClient,m,strlen(m))) == -1)
+      {
+        perror("Erreur de Send");
+        exit(1);
+      }
+      m[0]='\0';
+       if (Receive(sClient, m) < 0)
+        {
+            perror("Erreur de Receive");
+        }
+        strcpy(cpy,m);
+        printf("la chaine dans supp : %s\n",m);
+          tok=strtok(m,s);
+         if (strcmp(tok, "CADDIE") == 0)
+        {      
+           w->dialogueMessage("Suppression","suppression reussie");
+           //tok=strtok(NULL,s);
 
+           mettreAJourArticle(cpy); 
+           w->setTotal(totalCaddie);
+          
+        }
+        else
+        {
+          w->dialogueErreur("Suppression","suppression impossible");
+        }
+  
+  }
+  
 }
 
 //***** Fin de connexion ********************************************
@@ -704,10 +821,6 @@ void HandlerSIGINT(int s)
 
 void mettreAJourArticle(char* c)
 {
-   /*char nbrStr[3];
-    nbrStr[0] = c[0];
-    nbrStr[1] = c[1];
-    nbrStr[2] = '\0';*/
   char nobr[3],id[3],intitule[50],inti[50],prix[30],pr[30],stock[30],st[30];
           int  sto;
           float pri;
@@ -724,7 +837,6 @@ void mettreAJourArticle(char* c)
   int nbr = atoi(nobr);
   printf("nbr = %d\n\n\n",nbr);
   w->videTablePanier();
-  totalCaddie=0.0;
   
     for (int i = 0; i < nbr; i++) {
     tok = strtok(NULL, s);//pour la place dans panier
@@ -751,6 +863,7 @@ void mettreAJourArticle(char* c)
 
     printf("apres\n");
     totalCaddie += sto * pri;
+    w->setTotal(totalCaddie);
     printf("inti : %s & prix = %f & stock = %d\n",inti,pri,sto);
     w->ajouteArticleTablePanier(inti, pri, sto);
     
