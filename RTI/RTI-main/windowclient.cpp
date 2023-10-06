@@ -336,9 +336,14 @@ void WindowClient::closeEvent(QCloseEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonLogin_clicked()
 {
-  char message[80],reponse[80],opt[20];
-  
- 
+  if(strcmp(getNom(),"")==0 || strcmp(getMotDePasse(),"")==0)
+  {
+    dialogueErreur("Erreur login", "veuillez completer les champs");
+  }
+  else
+  {
+    char message[80],reponse[80],opt[20];
+   
   sprintf(message,"LOGIN");
   strcat(message,s);
   strcat(message,getNom());
@@ -433,6 +438,7 @@ void WindowClient::on_pushButtonLogin_clicked()
       }
       
     }
+  }
 
 
 }
@@ -472,6 +478,7 @@ void WindowClient::on_pushButtonLogout_clicked()
           w->dialogueErreur("Suppression","suppression impossible");
         }  
   }
+  printf("envoi de logout\n");
   sprintf(m,"LOGOUT");
    strcat(m,s);
      if (Send(sClient,m,strlen(m)) == -1)
@@ -479,7 +486,17 @@ void WindowClient::on_pushButtonLogout_clicked()
       perror("Erreur de Send");
       exit(1);
     }
-   w->logoutOK();
+    m[0]='\0';
+  if(Receive(sClient,m)<0)
+   {
+    perror("Erreur de Receive");
+   }
+
+    tok=strtok(m,s);
+    if(strcmp(tok,"LOGOUT")==0)
+    {
+      w->logoutOK();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -580,7 +597,15 @@ void WindowClient::on_pushButtonPrecedent_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonAcheter_clicked()
 {
-    char m[500],IP[20],Quantite[20],article[10],opt[20];
+  if(getQuantite()==0)
+  {
+    dialogueErreur("Erreur achat", "veuillez selectionner une quantite valide");
+   
+  }
+  else
+  {
+   char m[500],IP[20],Quantite[20],article[10],opt[20];
+  
   int nbEcrits;
   sprintf(m,"ACHAT");
   strcat(m,s);
@@ -615,42 +640,40 @@ void WindowClient::on_pushButtonAcheter_clicked()
           int nbr = atoi(tok);
           printf("nbr : %d",nbr);
                     
-              w->dialogueMessage("Achat", "Vous avez achete avec succes ");
-              w->videTablePanier();
-              totalCaddie=0.0;
-              char id[3],intitule[20],prix[10],stock[10];
-              int  sto;
-              float pri;
-              tok=strtok(NULL,s);
-              for(int i=0;i<nbr;i++)
-              {
-                
-                tok=strtok(NULL,s);
-                strcpy(id, tok);
-                NumArticle = atoi(id);
-                tok=strtok(NULL,s);
-                strcpy(intitule, tok);
-                tok=strtok(NULL,s);
-                   strcpy(prix, tok);
-                   pri=atof(prix);
-                   tok=strtok(NULL,s);
-                   strcpy(stock, tok);
-                   sto=atoi(stock);
-
-                    w->ajouteArticleTablePanier(intitule,pri,sto);
-                    totalCaddie+=sto*pri;
-                    w->setTotal(totalCaddie);
-              }
+          w->dialogueMessage("Achat", "Vous avez achete avec succes ");
+          w->videTablePanier();
+          totalCaddie=0.0;
+          char id[3],intitule[20],prix[10],stock[10];
+          int  sto;
+          float pri;
+          tok=strtok(NULL,s);
+          for(int i=0;i<nbr;i++)
+          {
+            
+            tok=strtok(NULL,s);
+            strcpy(id, tok);
+            NumArticle = atoi(id);
+            tok=strtok(NULL,s);
+            strcpy(intitule, tok);
+            tok=strtok(NULL,s);
+            strcpy(prix, tok);
+            pri=atof(prix);
+            tok=strtok(NULL,s);
+            strcpy(stock, tok);
+            sto=atoi(stock);
+            w->ajouteArticleTablePanier(intitule,pri,sto);
+            totalCaddie+=sto*pri;
+            w->setTotal(totalCaddie);
+          }
         }
         else
         {
 
-              tok=strtok(NULL,s);
-              tok=strtok(NULL,s);
-              w->dialogueMessage("Achat",tok);
-            
-
-        }
+          tok=strtok(NULL,s);
+          tok=strtok(NULL,s);
+          w->dialogueMessage("Achat",tok);
+      }
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,8 +682,7 @@ void WindowClient::on_pushButtonSupprimer_clicked()
   char m[500],cpy[500],id[20],Quantite[20],article[10],opt[20];
   if(getIndiceArticleSelectionne()==-1)
     {
-        dialogueErreur("Erreur suppression", "suppression imposible");
-        exit(1);
+        dialogueErreur("Erreur suppression", "veuillez selectionner un article");
     }
     else
     {
@@ -702,7 +724,13 @@ void WindowClient::on_pushButtonSupprimer_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonViderPanier_clicked()
 {
-  char m[500],cpy[500],id[20],Quantite[20],article[10],opt[20];
+  if(totalCaddie==0.0)
+  {
+    dialogueErreur("Erreur suppression", "panier vide");
+  }
+  else
+  {
+    char m[500],cpy[500],id[20],Quantite[20],article[10],opt[20];
  
       sprintf(m,"CANCEL_ALL");
       strcat(m,s);
@@ -732,7 +760,9 @@ void WindowClient::on_pushButtonViderPanier_clicked()
         else
         {
           w->dialogueErreur("Suppression","suppression impossible");
-        }
+        }  
+  }
+  
     
 }
 

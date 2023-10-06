@@ -178,7 +178,6 @@ void Envoi(char* requete,int sService)
 	{
 		perror("Erreur de Send");
 		close(sService);
-		//exit(1);
 	}
 }
 
@@ -189,6 +188,5 @@ void Recevoir(char* requete,int sService)
 	{
 		perror("Erreur de Receive");
 		close(sService);
-		//exit(1);
 	}
 }

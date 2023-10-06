@@ -224,7 +224,7 @@ void FctLogin(char* requete,char * reponse,int socket) //attention, on va écrir
             if ((Tuple = mysql_fetch_row(resultat)) != NULL) {
                 strcpy(id,Tuple[0]);
             }
-          sprintf(communication,"LOGIN");
+             sprintf(communication,"LOGIN");
 		  strcat(communication,s);
 		  sprintf(sta,"%d",status);
 		  strcat(communication,sta);
@@ -235,14 +235,15 @@ void FctLogin(char* requete,char * reponse,int socket) //attention, on va écrir
 		   strcat(communication,s);
 		   strcat(communication,"\0");
 		  strcpy(reponse,communication);
-		  if(status==1&&!estPresent(socket))
-		  {
 
 		  	ajoute(socket);
 		  }	
-}
+		 
+
 void FctLogout(char* requete,char * reponse,int socket)
 {
+	sprintf(reponse,"LOGOUT");
+	strcat(reponse,s);
 	if(estPresent(socket)==1)
 		{
 			retire(socket);
@@ -402,7 +403,7 @@ void FctCancel(char* requete,char* reponse,char* lArticle)
 		{
 			sprintf(reponse,"CANCEL");
 			strcat(reponse,s);
-				strcat(reponse,"-1");
+			strcat(reponse,"-1");
 			strcat(reponse,s);
 			strcat(reponse,"\0");
 			printf("reponse : %s\n",reponse);
