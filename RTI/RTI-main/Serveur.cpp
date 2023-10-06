@@ -16,7 +16,6 @@
 #define NB_THREADS_POOL 2
 #define TAILLE_FILE_ATTENTE 20
 pthread_mutex_t mutexSocketsAcceptees;
-pthread_mutex_t mutexAccesBD;
 pthread_cond_t condSocketsAcceptees;
 int socketsAcceptees[TAILLE_FILE_ATTENTE];
 int indiceEcriture=0, indiceLecture=0;
@@ -40,7 +39,6 @@ if (argc != 2)
 }
 // Initialisation socketsAcceptees
 pthread_mutex_init(&mutexSocketsAcceptees,NULL);
-pthread_mutex_init(&mutexAccesBD,NULL);
 pthread_cond_init(&condSocketsAcceptees,NULL);
 for (int i=0 ; i<TAILLE_FILE_ATTENTE ; i++)
 socketsAcceptees[i] = -1;

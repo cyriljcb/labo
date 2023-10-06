@@ -637,14 +637,8 @@ void WindowClient::on_pushButtonSupprimer_clicked()
           tok=strtok(m,s);
          strcpy(opt, tok);
          if (strcmp(opt, "CADDIE") == 0)
-        {
-          
-          //tok=strtok(NULL,s);
-          
-          
+        {          
            w->dialogueMessage("Suppression","suppression reussie");
-           //tok=strtok(NULL,s);
-
            mettreAJourArticle(cpy); 
           
         }
@@ -659,7 +653,38 @@ void WindowClient::on_pushButtonSupprimer_clicked()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WindowClient::on_pushButtonViderPanier_clicked()
 {
+  char m[500],cpy[500],id[20],Quantite[20],article[10],opt[20];
+ 
+      sprintf(m,"CANCEL_ALL");
+      strcat(m,s);
+      strcat(m,"\0");
+       if ((Send(sClient,m,strlen(m))) == -1)
+      {
+        perror("Erreur de Send");
+        exit(1);
+      }
+      m[0]='\0';
+       if (Receive(sClient, m) < 0)
+        {
+            perror("Erreur de Receive");
+        }
+        strcpy(cpy,m);
+        printf("la chaine dans supp : %s\n",m);
+          tok=strtok(m,s);
+         strcpy(opt, tok);
+         if (strcmp(opt, "CADDIE") == 0)
+        {      
+           w->dialogueMessage("Suppression","suppression reussie");
+           //tok=strtok(NULL,s);
 
+           mettreAJourArticle(cpy); 
+          
+        }
+        else
+        {
+          w->dialogueErreur("Suppression","suppression impossible");
+        }
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

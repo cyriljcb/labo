@@ -24,17 +24,23 @@ const char dollar[2]="$";
 char* tok;
 
 int suppArticle(char* lArticle,char* m);
+void suppAllArticle(char* lArticle);
 void ajouterArticle(char* lArticle,char* c);
 void Connexion_OVESP();
 void FctLogin(char* requete, char* reponse, int socket);
 void FctConsult(char* requete,char * reponse);
 void FctAchat(char* requete,char * reponse,char* lArticle);
 void FctCancel(char* requete,char * reponse,char* lArticle);
-void FctCaddie(char* requete, char* reponse,char* lArticle);
+void FctCancelAll(char* requete,char * reponse,char* lArticle);
+void FctCaddie(char* requete, char* reponse,char* lArticle,bool cancelAll);
 void requeteDB(int ind, char* req1);
 int recupererNbrArticle(char* lArticle);
 char* remplacerpoint(char *str);
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_t mutexAccesBD = PTHREAD_MUTEX_INITIALIZER;
+
+
 
 void Connexion_OVESP()
 {
@@ -52,39 +58,61 @@ void Connexion_OVESP()
 
 void AccesBD_OVESP(char* requete, char * reponse,int socket,char * lArticle)
 {
-
 	char req[500],opt[20];
 	strcpy(req,requete);
 	printf("requete : %s & req : %s\n",requete,req);
 	tok=strtok(req,s);
+	sprintf(opt,tok);
 	printf("tok : %s\n",tok);
 	Connexion_OVESP();
-	if (strcmp(tok, "LOGIN") == 0)
+	if (strcmp(opt, "LOGIN") == 0)
 	{
 		printf("login\n");
+		pthread_mutex_lock(&mutexAccesBD);
 		FctLogin(requete,reponse,socket);
+		pthread_mutex_unlock(&mutexAccesBD);
 	}
-	if(strcmp(tok,"CONSULT")==0)
+	else
 	{
+		if(strcmp(opt,"CONSULT")==0)
+		{
 
-		printf("CONSULT\n");
-		FctConsult(requete,reponse);
+			printf("CONSULT\n");
+			pthread_mutex_lock(&mutexAccesBD);
+			FctConsult(requete,reponse);
+			pthread_mutex_unlock(&mutexAccesBD);
+		}
+		else
+		{
+			if(strcmp(opt,"ACHAT")==0)
+			{
+				pthread_mutex_lock(&mutexAccesBD);
+				FctAchat(requete,reponse,lArticle);
+				pthread_mutex_unlock(&mutexAccesBD);
+			}		
+			else
+			{
+				if(strcmp(opt,"CANCEL")==0)
+				{
+					pthread_mutex_lock(&mutexAccesBD);
+					FctCancel(requete,reponse,lArticle);
+					pthread_mutex_unlock(&mutexAccesBD);
+				}
+				else
+				{
+					if(strcmp(opt,"CANCEL_ALL")==0)
+					{
+						pthread_mutex_lock(&mutexAccesBD);
+						FctCancelAll(requete,reponse,lArticle);
+						pthread_mutex_unlock(&mutexAccesBD);
+					}
+				}
+			}
+		}	
+
 	}
 	
-	if(strcmp(tok,"ACHAT")==0)
-	{
-		FctAchat(requete,reponse,lArticle);
-		printf("AMMMMMMMMMMMMMM\n");
-	}
-	if(strcmp(tok,"CANCEL")==0)
-	{
-		FctCancel(requete,reponse,lArticle);
-		printf("sors du case CANCEL\n");
-	}
-	/*if(strcmp(tok,"CADDIE")==0)
-	{
-		FctCaddie(requete,reponse,lArticle);
-	}*/
+	
 	printf("(AccesBD)\n\nrequete : %s\nreponse : %s\nlArticle : %s\n\n\n",requete,reponse,lArticle);
 }
 
@@ -279,7 +307,7 @@ void FctAchat(char* requete,char* reponse,char* lArticle)
 					  strcat(c,quant);
 					  printf("c = %s\n",c);
 					  ajouterArticle(lArticle,c);
-					  FctCaddie(requete,reponse,lArticle);
+					  FctCaddie(requete,reponse,lArticle,false);
 					  printf("sors du ajouterArticle\n");
 	         	}
 	         	else
@@ -323,7 +351,7 @@ void FctCancel(char* requete,char* reponse,char* lArticle)
 		
 		if(a==1)
 		{
-			FctCaddie(requete,reponse,lArticle);             
+			FctCaddie(requete,reponse,lArticle,false);             
 		}
 		else
 		{
@@ -335,24 +363,34 @@ void FctCancel(char* requete,char* reponse,char* lArticle)
 			printf("reponse : %s\n",reponse);
 		}
 }
-void FctCaddie(char* requete, char* reponse,char* lArticle)
+void FctCaddie(char* requete, char* reponse,char* lArticle,bool cancelAll)
 {
 	printf("rentre dans caddie\n");
 	sprintf(reponse,"CADDIE");
 	strcat(reponse,s);
-	char tmp[500],nbr[3];
-	strncpy(nbr,lArticle,2);
-	if(nbr[0]=='0')
+	if(!cancelAll)
 	{
-		nbr[0]=nbr[1];
-		nbr[1]='\0';
+
+		char tmp[500],nbr[3];
+		strncpy(nbr,lArticle,2);
+		if(nbr[0]=='0')
+		{
+			nbr[0]=nbr[1];
+			nbr[1]='\0';
+		}
+		strcat(reponse,nbr);
+		strcat(reponse,s);
+		strcpy(tmp,lArticle+2);
+		strcat(reponse,tmp);
+		strcat(reponse,s);
 	}
-	strcat(reponse,nbr);
-	strcat(reponse,s);
-	strcpy(tmp,lArticle+2);
-	strcat(reponse,tmp);
-	strcat(reponse,s);
 	strcat(reponse,"\0");
+}
+void FctCancelAll(char* requete, char* reponse,char* lArticle)
+{
+	printf("rentre dans FctCancelAll\n");
+	suppAllArticle(lArticle);
+	FctCaddie(requete,reponse,lArticle,true);
 }
 int estPresent(int socket)
 {
@@ -587,4 +625,81 @@ int suppArticle(char* lArticle,char* ind)
     printf("la liste = %s\n", lArticle);
     return b;
 	
+}
+void suppAllArticle(char* lArticle)
+{
+	MYSQL_RES  *resultat;
+  MYSQL_ROW  Tuple;
+	printf("la chaine : %s\n",lArticle);
+    int indice;
+    char cpy[70] = "",test[500]="",id[3]="",tmp[70]="",str[500]="",requeteSQL[500];
+    char listeArticle[100];
+    char quantite[10],place[2];
+    sprintf(test,lArticle);
+		tok = strtok(test, dollar);
+	tok=strtok(NULL,s);    //skip la place
+	tok=strtok(NULL,s);
+    while (tok != NULL) 
+    {
+
+    	/*strcpy(cpy,tok);   //contient UN article
+    	tok=strtok(cpy,)*/
+
+
+    	printf("debut de la while\n");
+    	
+    	if(tok!=NULL);    //pour l'id
+    	{
+    		printf("ce que contiens tok : %s\n",tok);
+    	strcpy(id,tok);   //pour rechercher ind dans BD
+       printf("debut 1 de la while\n");
+      int idInt = atoi(id);
+			tok=strtok(NULL,s);    //intitule
+			printf("debut2 de la while\n");
+			tok=strtok(NULL,s);		//prix
+			printf("debut3 de la while\n");
+			tok=strtok(NULL,s);  //stock
+			printf("debut4 de la while\n");
+			strcpy(quantite,tok);
+			sprintf(requeteSQL,"select * from articles where id='%d'",idInt);
+			printf("select * from articles where id='%d'\n",idInt);
+			if (mysql_query(connexion,requeteSQL) != 0)
+	          {
+	           
+	            exit(1);
+	          }
+			if ((resultat = mysql_store_result(connexion)) == NULL)
+	          {
+	            printf("Erreur de mysql_store_result: %s\n",mysql_error(connexion));
+	            exit(1);
+	          }
+	          if((Tuple = mysql_fetch_row(resultat)) != NULL)
+	          {
+
+	            int quant,quantBD,quanttotal;
+	            char tmp[500];
+	            sprintf(tmp,lArticle);
+	            printf("id : %s\n",id);
+	            quant=atoi(quantite);
+	            printf("quant : %d\n",quant);
+	            quantBD=atoi(Tuple[3]);
+	            quanttotal = quant + quantBD;
+	            printf("la quantite totale : %d\n",quanttotal);
+	              sprintf(requeteSQL,"UPDATE articles SET stock = %d where id=%d",quanttotal,idInt);
+	              printf("UPDATE articles SET stock = %d where id=%d\n",quanttotal,idInt);
+	              if (mysql_query(connexion,requeteSQL) != 0)
+	                {
+	                   printf("Erreur de mysql_query: %s\n",mysql_error(connexion));
+	                  exit(1);
+	                }
+	          }
+        	
+            //tok = strtok(NULL, s); //va contenir $+la place dans la liste mais pas grave
+            printf("tok : %s\n",tok);
+      			tok=strtok(NULL,s);
+    	} 
+    	      
+        }
+      sprintf(lArticle,"00$");
+      printf("fin de cancelALL\n");
 }
